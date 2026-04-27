@@ -1,0 +1,66 @@
+{% extends "dashboard/base.html.twig" %}
+{% block content %}
+    <main class="px-10 py-10 flex-1">
+        <h1 class="text-3xl font-semibold mb-8">
+            All Messages
+        </h1>
+        <div class="flex justify-between items-center mb-4">
+            <input type="text" placeholder="Search" class="border border-gray-400 rounded-md px-3 py-1 text-sm"></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-yellow-600 text-black">
+                        <tr>
+                            <th class="px-3 py-2">
+                                #
+                            </th>
+                            <th class="px-3 py-2">
+                                Sent By
+                            </th>
+                            <th class="px-3 py-2">
+                                Subject
+                            </th>
+                            <th class="px-3 py-2">
+                                Message
+                            </th>
+                            <th class="px-3 py-2">
+                                Recieved
+                            </th>
+                            <th class="px-3 py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for msg in msgs %}
+                            <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-gray-200' }}">
+                                <td class="px-3 py-2">
+                                    {{ msg.id }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ msg.sentBy }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ msg.subject }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ msg.message }}
+                                    €
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ msg.recieved|date('d M H:i, Y') }}
+                                </td>
+                                <td class="px-3 py-2 space-x-2">
+                                    <a href="{{ path('dashboard_message_view', {id: msg.id }) }}" class="text-blue-600 hover:underline">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="text-red-600 hover:underline">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% include "dashboard/partials/_pagination.html.twig" %}
+        </main>
+    {% endblock %}
+    

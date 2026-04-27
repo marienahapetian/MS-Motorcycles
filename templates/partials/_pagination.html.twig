@@ -1,0 +1,16 @@
+<div class="flex items-center justify-center gap-3 mt-8">
+    {% for page in 1..totalPages %}
+        <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({page: page})) }}" class="
+                w-10 h-10 flex items-center justify-center
+                text-sm font-medium
+                {% if page == currentPage %}
+                bg-gray-800 text-white
+                {% else %}
+                bg-gray-200 text-gray-600 hover:bg-gray-300
+                {% endif %}
+                transition
+            ">
+            {{ page }}
+        </a>
+    {% endfor %}
+</div>

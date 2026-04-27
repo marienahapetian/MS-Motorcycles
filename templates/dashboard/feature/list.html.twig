@@ -1,0 +1,62 @@
+{% extends "dashboard/base.html.twig" %}
+{% block content %}
+    <main class="px-10 py-10 flex-1">
+        <h1 class="text-3xl font-semibold mb-8">
+            Product Features
+        </h1>
+        <div class="flex justify-between items-center mb-4">
+            <a href="{{ path('feature_add') }}" class="bg-indigo-300 text-gray-800 px-4 py-2 rounded-md font-medium">
+                + Add New Feature
+            </a>
+            <input type="text" placeholder="Search" class="border border-gray-400 rounded-md px-3 py-1 text-sm"></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-yellow-600 text-black">
+                        <tr>
+                            <th class="px-3 py-2">
+                                #
+                            </th>
+                            <th class="px-3 py-2">
+                                Name
+                            </th>
+                            <th class="px-3 py-2">
+                                Categories
+                            </th>
+                            <th class="px-3 py-2">
+                                Values
+                            </th>
+                            <th class="px-3 py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature in features %}
+                            <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-gray-200' }}">
+                                <td class="px-3 py-2">
+                                    {{ feature.id }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ feature.name }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ feature.categories|join(', ') }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ feature.values|join(', ') }}
+                                </td>
+                                <td class="px-3 py-2 space-x-2">
+                                    <a href="{{ path('feature_edit', {id: feature.id}) }}" class="text-blue-600 hover:underline">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="text-red-600 hover:underline">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% include "dashboard/partials/_pagination.html.twig" %}
+        </main>
+    {% endblock %}
+    

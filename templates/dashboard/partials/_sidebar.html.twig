@@ -1,0 +1,25 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+<aside class="w-60 purplegreybg text-white flex flex-col py-10 px-5">
+    <div class="mb-10">
+        <nav class="space-y-3 text-sm">
+            <a href="{{ path('dashboard_home') }}" class="block text-xl px-3 {{ currentRoute == 'dashboard_home' ? 'orangecolor' : '' }}">
+                Home
+            </a>
+            <a href="{{ path('dashboard_products') }}" class="block text-xl px-3 {{ currentRoute == 'dashboard_products' ? 'orangecolor' : '' }}">
+                Products
+            </a>
+            <a href="{{ path('dashboard_messages') }}" class="block text-xl px-3 {{ currentRoute == 'dashboard_messages' ? 'orangecolor' : '' }}">
+                Messages
+            </a>
+            <a href="{{ path('dashboard_categories') }}" class="block text-xl px-3  {{ currentRoute == 'dashboard_categories' ? 'orangecolor' : '' }}">
+                Categories
+            </a>
+            <a href="{{ path('dashboard_features') }}" class="block text-xl px-3 {{ currentRoute == 'dashboard_features' ? 'orangecolor' : '' }}">
+                Features
+            </a>
+            <a href="{{ path('dashboard_settings') }}" class="block text-xl px-3 py-2 {{ currentRoute == 'dashboard_settings' ? 'orangecolor' : '' }}">
+                Settings
+            </a>
+        </nav>
+    </div>
+</aside>

@@ -1,0 +1,46 @@
+<div class="w-56 text-gray-800">
+    <div class="mb-6">
+        <h3 class="text-red-700 font-semibold mb-3">
+            Categories
+        </h3>
+        <div class="space-y-2">
+            {% for category in categories %}
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="categories[]" value="{{ category.id }}" class="w-4 h-4 border-gray-400 rounded" />
+                    <span class="font-medium">
+                        {{ category.name }}
+                    </span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mb-6">
+        <h3 class="text-red-700 font-semibold mb-3">
+            Price
+        </h3>
+        <div class="space-y-2">
+            {% for price in prices %}
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="prices[]" value="{{ price.value }}" class="w-4 h-4 border-gray-400 rounded" />
+                    <span class="font-medium">
+                        {{ price.label }}
+                    </span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <h3 class="text-red-700 font-semibold mb-3">
+            Color
+        </h3>
+        <div class="flex space-x-3">
+            {% for color in colors %}
+                <label class="relative cursor-pointer">
+                    <input type="checkbox" name="colors[]" value="{{ color.name }}" class="sr-only peer" />
+                    <div class="w-6 h-6 rounded border border-gray-300
+                    peer-checked:ring-2 peer-checked:ring-offset-1" style="background-color: {{ color.hex }}"></div>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+</div>

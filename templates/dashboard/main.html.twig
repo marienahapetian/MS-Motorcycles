@@ -1,0 +1,73 @@
+{% extends "dashboard/base.html.twig" %}
+{% block content %}
+    <main class="px-10 py-10 flex-1">
+        <h1 class="text-3xl font-semibold mb-8">
+            Dashboard
+        </h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+            <div class="bg-white px-6 py-2 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">
+                    Total Products
+                </p>
+                <h2 class="text-3xl font-bold mt-2">
+                    {{ totalProducts }}
+                </h2>
+            </div>
+            <div class="bg-white px-6 py-2 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">
+                    Total Categories
+                </p>
+                <h2 class="text-3xl font-bold mt-2">
+                    {{ totalCategories }}
+                </h2>
+            </div>
+            <div class="bg-white px-6 py-2 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">
+                    Messages
+                </p>
+                <h2 class="text-3xl font-bold mt-2">
+                    {{ totalMessages }}
+                </h2>
+            </div>
+            <div class="bg-white px-6 py-2 rounded-xl shadow">
+                <p class="text-gray-500 text-sm">
+                    Visits
+                </p>
+                <h2 class="text-3xl font-bold mt-2">
+                    {{ totalVisits }}
+                </h2>
+            </div>
+        </div>
+        <div class="bg-white px-6 py-2 rounded-xl shadow">
+            <h2 class="text-lg font-semibold mb-4">
+                Website Visits per Month
+            </h2>
+            <canvas id="visitsChart" height="100"></canvas>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script id="dash002">
+const ctx = document.getElementById('visitsChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+            label: 'Visits',
+            data: {{ visitsPerMonth|json_encode|raw }},
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59,130,246,0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+</script>
+{% endblock %}

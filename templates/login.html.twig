@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% block header %}
+    <section class="header">
+        {% include 'partials/_header.html.twig' %}
+        <div class="relative banner h-30 -mt-30">
+            <img src="{{ asset('images/1907896.jpg') }}" alt="Bike" class="brightness-50 w-full h-full object-cover object-center" />
+        </div>
+    </section>
+{% endblock %}
+{% block content %}
+    <div class="flex items-center justify-center  py-25">
+        <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md px-10 py-8 w-full max-w-md text-center">
+            <h1 class="text-xl font-semibold mb-6 tracking-wide">
+                Connection
+            </h1>
+            <form method="post" action="{{ path('app_login') }}" class="space-y-4">
+                <input type="email" name="_username" placeholder="Email" class="w-full px-4 py-2 rounded-md border border-gray-300 bg-transparent
+                    focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm">
+                    <input type="password" name="_password" placeholder="Password" class="w-full px-4 py-2 rounded-md border border-gray-300 bg-transparent
+                        focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm">
+                        <button type="submit" class="w-full py-2 rounded-md accentbg whitecolor font-medium transition">
+                            Connect
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endblock %}
+        

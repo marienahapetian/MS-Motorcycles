@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {% block title %}
+                MS Motorcycles
+            {% endblock %}
+        </title>
+        <link rel="icon" href="/images/logo-removebg.png">
+        <link href="https://fonts.googleapis.com/css2?family=Jeju+Hallasan&display=swap" rel="stylesheet">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+
+        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+        {% if frankenphpHotReload %}
+            <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
+            <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
+            <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
+        {% endif %}
+    </head>
+    <body class="min-h-screen flex flex-col {{ app.request.attributes.get('_route') }}"></body>
+
+    {% block body %}
+        {% block header %}
+            {% include 'dashboard/partials/_header.html.twig' %}
+        {% endblock %}
+
+        <div class="flex flex-1">
+            {% block sidebar %}
+                {% include 'dashboard/partials/_sidebar.html.twig' %}
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+    {% endblock %}
+</html></body></html>

@@ -1,5 +1,9 @@
 twig:
-    file_name_pattern: '*.twig'
+    cache: false
+    file_name_pattern: "*.twig"
+    globals:
+        ga_tracking: "UA-xxxxx-x"
+        hasSidebar: false
 
 when@test:
     twig:

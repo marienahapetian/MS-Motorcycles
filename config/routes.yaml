@@ -9,3 +9,7 @@
 
 controllers:
     resource: routing.controllers
+blog_add:
+    path: /blog/add
+    # the controller value has the format 'controller_class::method_name'
+    controller: App\Controller\BlogController::add

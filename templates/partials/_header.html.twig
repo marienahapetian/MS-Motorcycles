@@ -1,0 +1,36 @@
+{# templates/partials/_header.html.twig #}
+
+<header class="site-header">
+    <div class="header-overlay">
+        <div class="container header-content">
+
+            {# Logo #}
+            <div class="logo">
+                <a href="{{ path('homepage') }}">
+                    <img src="{{ asset('images/logo_white.png') }}" alt="M&S Logo">
+                </a>
+            </div>
+
+            {# Navigation #}
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ path('homepage') }}">Home</a></li>
+                    <li><a href="{{ path('shop') }}">Shop</a></li>
+                    <li><a href="{{ path('homepage') }}#about">About Us</a></li>
+                    <li><a href="{{ path('homepage') }}#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            {# Right Icons #}
+            <div class="header-icons">
+                <a href="{{ path('search') }}" class="icon search">
+                    <img src="{{ asset('images/magnifying-glass.png') }}" alt="Search Icon">
+                </a>
+                <a href="{{ path('app_login') }}" class="icon user">
+                    <img src="{{ asset('images/user.png') }}" alt="User Account Icon">
+                </a>
+            </div>
+
+        </div>
+    </div>
+</header>

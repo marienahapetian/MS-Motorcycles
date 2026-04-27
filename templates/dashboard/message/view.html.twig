@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html.twig" %}
+{% block content %}
+    <div class="flex-1 py-10 px-10">
+        <a href="{{ path('dashboard_messages') }}" class="btn btn-secondary mb-2 inline-block bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500">
+            ← Back to list
+        </a>
+        <h1 class="text-3xl font-semibold mb-8">
+            Message Details
+        </h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="mb-3">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">
+                        Name:
+                    </span>
+                    <p class="mb-0 bg-gray-100 border px-3 py-2">
+                        {{ message.sentBy }}
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">
+                        Email:
+                    </span>
+                    <p class="bg-gray-100 border px-3 py-2">
+                        <a href="mailto:{{ message.email }}">
+                            {{ message.email }}
+                        </a>
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">
+                        Subject:
+                    </span>
+                    <p class="bg-gray-100 border px-3 py-2">
+                        {{ message.subject }}
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">
+                        Message:
+                    </span>
+                    <div class="bg-gray-100 border px-3 py-2 ">
+                        {{ message.message|nl2br }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">
+                        Recieved At:
+                    </span>
+                    <p class="bg-gray-100 border px-3 py-2">
+                        {{ message.recieved|date('Y-m-d H:i') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

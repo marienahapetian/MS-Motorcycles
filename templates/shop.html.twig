@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+{% block header %}
+    <section class="header">
+        {% include 'partials/_header.html.twig' %}
+        <div class="relative banner h-90 -mt-30">
+            <img src="{{ asset('images/1907896.jpg') }}" alt="Bike" class="brightness-50 w-full h-full object-cover object-center" />
+            <h1 class="absolute bottom-17.5 left-1/2 -translate-x-1/2 text-white text-8xl">
+                {{ page_title }}
+            </h1>
+        </div>
+    </section>
+{% endblock %}
+{% block sidebar %}
+    <aside class="dotted-bg w-64 shrink-0 py-19 px-5">
+        {% include "partials/_filters.html.twig" %}
+    </aside>
+{% endblock %}
+{% block content %}
+    <div class="py-8 px-20 flex-1 bg-white">
+        {% include "partials/_sorting.html.twig" %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for product in products %}
+                <div class="bg-white shadow-md rounded-sm overflow-hidden">
+                    <div class="w-full h-48 overflow-hidden">
+                        <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex items-center justify-between px-4 py-3 bg-white">
+                        <span class="font-semibold text-gray-800">
+                            {{ product.name }}
+                        </span>
+                        <a href="{{ path('product_show', {id: product.id, slug: product.slug}) }}" class="bg-gray-800 text-white text-sm px-3 py-1 rounded hover:bg-gray-700 transition">
+                            View
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% include "partials/_pagination.html.twig" %}
+    </div>
+    {% block page_contents %}{% endblock %}
+{% endblock %}
