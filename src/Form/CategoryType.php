@@ -4,7 +4,11 @@ namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryType extends AbstractType
@@ -13,7 +17,9 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('icon')
+            ->add('icon', FileType::class)
+            ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
+            ->add('cancel', ButtonType::class, ['label' => 'Annuler'])
         ;
     }
 

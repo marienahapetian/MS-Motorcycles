@@ -2,6 +2,8 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Entity\Category;
+use App\Form\CategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,7 +43,8 @@ class CategoryController extends AbstractController
     #[Route("/dashboard/category/add", "category_add")]
     public function add(): Response
     {
-
-        return $this->render("dashboard/category/add.html.twig");
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        return $this->render("dashboard/category/add.html.twig", ['form' => $form]);
     }
 }
