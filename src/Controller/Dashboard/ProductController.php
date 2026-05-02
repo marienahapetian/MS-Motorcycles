@@ -31,6 +31,7 @@ class ProductController extends AbstractController
     #[Route('/product/edit/{id}', name: 'product_edit')]
     public function edit(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $product = [
             "title" => "Harley Davidson",
             "mainImage" => "/images/uploads/S0-harley-davidson-prepare-un-nouveau-custom-pour-2021-186722.jpg",
@@ -52,6 +53,7 @@ class ProductController extends AbstractController
     #[Route('/product/add', name: 'product_add')]
     public function add(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render("dashboard/product/add.html.twig", []);
     }
 }
