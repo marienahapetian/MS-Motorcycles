@@ -2,6 +2,8 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Entity\Product;
+use App\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -54,6 +56,8 @@ class ProductController extends AbstractController
     public function add(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return $this->render("dashboard/product/add.html.twig", []);
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        return $this->render("dashboard/product/add.html.twig", ['form' => $form]);
     }
 }

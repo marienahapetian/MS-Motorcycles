@@ -18,14 +18,19 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $brand = null;
+    #[ORM\ManyToOne(targetEntity: Brand::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Brand $brand = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $year = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $price = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $category_id = null;
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -53,15 +58,26 @@ class Product
         return $this;
     }
 
-    public function getBrand(): ?string
+    public function getBrand(): ?Brand
     {
         return $this->brand;
     }
 
-    public function setBrand(string $brand): static
+    public function setBrand(?Brand $brand): self
     {
         $this->brand = $brand;
 
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(?int $year): self
+    {
+        $this->year = $year;
         return $this;
     }
 
@@ -77,15 +93,14 @@ class Product
         return $this;
     }
 
-    public function getCategoryId(): ?string
+    public function getCategory(): ?Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(string $category_id): static
+    public function setCategory(?Category $category): self
     {
-        $this->category_id = $category_id;
-
+        $this->category = $category;
         return $this;
     }
 
