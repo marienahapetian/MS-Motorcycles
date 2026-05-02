@@ -2,6 +2,8 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Entity\Feature;
+use App\Form\FeatureType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -49,6 +51,8 @@ class FeatureController extends AbstractController
     #[Route("/dashboard/feature/add", "feature_add")]
     public function add(): Response
     {
+        $feature = new Feature();
+        $form = $this->createForm(FeatureType::class, $feature);
         $categories = [
             ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
             ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
@@ -58,7 +62,8 @@ class FeatureController extends AbstractController
             ["id" => 6, "name" => "T-Shirt", "count" => 10, "createdAt" => "2026-03-28"],
         ];
         return $this->render("dashboard/feature/add.html.twig", [
-            'categories' => $categories
+            'categories' => $categories,
+            'form' => $form
         ]);
     }
 }

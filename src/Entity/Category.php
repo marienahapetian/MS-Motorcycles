@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -19,6 +21,19 @@ class Category
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $icon = null;
+
+    #[ORM\ManyToMany(targetEntity: Feature::class, mappedBy: 'categories')]
+    private Collection $features;
+
+    public function __construct()
+    {
+        $this->features = new ArrayCollection();
+    }
+
+    public function getFeatures(): Collection
+    {
+        return $this->features;
+    }
 
     public function getId(): ?int
     {
