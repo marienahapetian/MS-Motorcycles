@@ -13,6 +13,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Symfony\Component\Validator\Constraints\File;
 
 class ProductType extends AbstractType
 {
@@ -41,6 +44,22 @@ class ProductType extends AbstractType
                 'multiple' => true,
                 'mapped' => false, // important for uploads
                 'required' => false,
+                'constraints' => [
+                    new Assert\All([
+                        'constraints' => [
+                            new File([
+                                'maxSize' => '2048k',
+                                'mimeTypes' => [
+                                    'image/gif',
+                                    'image/jpeg',
+                                    'image/png',
+                                    'image/svg+xml',
+                                ],
+                                'mimeTypesMessage' => 'Only images are allowed',
+                            ])
+                        ]
+                    ])
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
             ->add('cancel', ButtonType::class, ['label' => 'Annuler'])

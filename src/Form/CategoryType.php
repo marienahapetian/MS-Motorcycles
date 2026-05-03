@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class CategoryType extends AbstractType
 {
@@ -17,7 +18,21 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('icon', FileType::class, ['required' => false])
+            ->add('icon', FileType::class, [
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2048k',
+                        'mimeTypes' => [
+                            'image/gif',
+                            'image/jpeg',
+                            'image/png',
+                            'image/svg+xml',
+                        ],
+                        'mimeTypesMessage' => 'Only images are allowed',
+                    ])
+                ]
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
             ->add('cancel', ButtonType::class, ['label' => 'Annuler'])
         ;
