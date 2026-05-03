@@ -4,7 +4,9 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Feature;
 use App\Form\FeatureType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -31,8 +33,18 @@ class FeatureController extends AbstractController
     }
 
     #[Route("/dashboard/feature/edit/{id}", "feature_edit")]
-    public function edit(): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $feature = new Feature();
+        $form = $this->createForm(FeatureType::class, $feature);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($feature);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('dashboard_features');
+        }
+
         $categories = [
             ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
             ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
@@ -41,18 +53,24 @@ class FeatureController extends AbstractController
             ["id" => 5, "name" => "Bracelet", "count" => 10, "createdAt" => "2026-03-28"],
             ["id" => 6, "name" => "T-Shirt", "count" => 10, "createdAt" => "2026-03-28"],
         ];
-        $feature = ["id" => 1, "name" => "Folded w Wheels", "categories" => ["Bike"], "values" => ["32.5″L x 18.5″W x 16.5″H"], "createdAt" => "2026-03-28"];
         return $this->render("dashboard/feature/edit.html.twig", [
             'feature' => $feature,
-            'categories' => $categories
+            'categories' => $categories,
+            'form' => $form
         ]);
     }
 
     #[Route("/dashboard/feature/add", "feature_add")]
-    public function add(): Response
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $feature = new Feature();
         $form = $this->createForm(FeatureType::class, $feature);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $feature = $form->getData();
+            return $this->redirectToRoute('dashboard_features');
+        }
         $categories = [
             ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
             ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
