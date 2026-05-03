@@ -29,15 +29,18 @@ class ProductType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir le type',
                 'required' => true,
-            ])->add('brand', EntityType::class, [
+            ])
+            ->add('brand', EntityType::class, [
                 'class' => Brand::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir la marque',
                 'required' => true,
-            ])->add('images', FileType::class, [
+            ])
+            ->add('images', FileType::class, [
                 'label' => false,
                 'multiple' => true,
                 'mapped' => false, // important for uploads
+                'required' => false,
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
             ->add('cancel', ButtonType::class, ['label' => 'Annuler'])

@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'products')]
@@ -16,30 +19,81 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: "Le titre est trop longue"
+
+    )]
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: Brand::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Veuillez sélectionner une ;qraue")]
+    #[Assert\Type(Brand::class)]
     private ?Brand $brand = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type(
+        type: 'integer',
+        message: 'L\'année doit être un nombre entier'
+    )]
+    #[Assert\Range(
+        min: 1900,
+        max: 2026,
+        notInRangeMessage: 'L\'année doit être entre {{ min }} et {{ max }}'
+    )]
     private ?int $year = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type(
+        type: 'numeric',
+        message: 'Le prix doit être un nombre'
+    )]
+    #[Assert\PositiveOrZero(message: 'Le prix doit être positif')]
     private ?float $price = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Veuillez sélectionner une catégorie")]
+    #[Assert\Type(Category::class)]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Type('string')]
+    #[Assert\Length(
+        max: 1000,
+        maxMessage: "Le a propos est trop longue"
+
+    )]
     private ?string $description = null;
+
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: ProductImage::class,
+        cascade: ['persist', 'remove']
+    )]
+    private Collection $images;
+
+    #[ORM\ManyToMany(
+        mappedBy: 'product',
+        targetEntity: ProductFeature::class,
+        cascade: ['persist', 'remove']
+    )]
+    private Collection $features;
 
     #[ORM\Column]
     private ?\DateTime $added = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $modified = null;
+
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+        $this->features = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +166,48 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImages(): ?Collection
+    {
+        return $this->images;
+    }
+
+    public function setImages(Collection $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    public function getMainImage(): ?ProductImage
+    {
+        foreach ($this->images as $image) {
+            if ($image->isMain()) {
+                return $image;
+            }
+        }
+
+        return null;
+    }
+
+    public function getGalleryImages(): ?Collection
+    {
+        return $this->images->filter(function (ProductImage $image) {
+            return !$image->isMain();
+        });
+    }
+
+    public function getFeatures(): ?Collection
+    {
+        return $this->features;
+    }
+
+    public function setFeatures(Collection $features): self
+    {
+        $this->features = $features;
 
         return $this;
     }
