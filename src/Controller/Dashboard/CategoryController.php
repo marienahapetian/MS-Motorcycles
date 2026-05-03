@@ -4,6 +4,7 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,11 +33,17 @@ class CategoryController extends AbstractController
     }
 
     #[Route("/dashboard/category/edit/{id}", "category_edit")]
-    public function edit(): Response
+    public function edit(Request $request, EntityManager $entityManager): Response
     {
-        $category = ["id" => 1, "name" => "Bike", "thumbnail" => "", "count" => 10, "createdAt" => "2026-03-28"];
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('dashboard_products');
+        }
 
         return $this->render("dashboard/category/edit.html.twig", [
             'category' => $category,
