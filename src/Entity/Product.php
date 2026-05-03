@@ -186,6 +186,13 @@ class Product
         return $this;
     }
 
+    public function addImage(ProductImage $image): self
+    {
+        $this->images[] = $image;
+        $image->setProduct($this);
+        return $this;
+    }
+
     public function getMainImage(): ?ProductImage
     {
         foreach ($this->images as $image) {
