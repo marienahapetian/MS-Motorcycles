@@ -23,7 +23,6 @@ class Product
     #[Assert\Length(
         max: 100,
         maxMessage: "Le titre est trop longue"
-
     )]
     private ?string $name = null;
 

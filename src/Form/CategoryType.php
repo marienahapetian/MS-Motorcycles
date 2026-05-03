@@ -17,7 +17,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('icon', FileType::class)
+            ->add('icon', FileType::class, ['required' => false])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
             ->add('cancel', ButtonType::class, ['label' => 'Annuler'])
         ;
