@@ -22,7 +22,7 @@
             {% for product in products %}
                 <div class="bg-white shadow-md rounded-sm overflow-hidden">
                     <div class="w-full h-48 overflow-hidden">
-                        <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
+                        <img src="{{ product.mainImage?product.mainImage.image: '/images/noimage.jpg' }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
                     </div>
                     <div class="flex items-center justify-between px-4 py-3 bg-white">
                         <span class="font-semibold text-gray-800">

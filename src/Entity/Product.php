@@ -111,6 +111,11 @@ class Product
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return str_replace(' ', '_', strtolower($this->name));
+    }
+
     public function getBrand(): ?Brand
     {
         return $this->brand;

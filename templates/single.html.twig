@@ -11,42 +11,58 @@
     <div class="max-w-6xl mx-auto px-6 py-12">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
-                <img src="{{ product.mainImage }}" alt="Bike" class="w-full h-80 object-cover mb-4">
-                    <div class="grid grid-cols-3 gap-3">
+                {% if product.mainImage %}
+                    <img
+                src="{{ product.mainImage.image }}" alt="Bike" class="w-full h-80 object-cover mb-4" />
+                    {% else %}
+                    <img src="/images/noimage.jpg" alt="Bike" class="w-full h-80 object-cover mb-4" />
+                {% endif %}
+                <div class="grid grid-cols-3 gap-3">
+                    {% if product.galleryImages is not empty %}
                         {% for image in product.galleryImages %}
-                            <img src="{{ image }}" alt="Thumbnail" class="w-full h-24 object-cover cursor-pointer hover:opacity-80 transition">
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-semibold tracking-wide mb-2">
-                            {{ product.title }}
-                        </h1>
-                        <p class="accentcolor mb-4">
-                            {{ product.year }}
-                        </p>
-                        <p class="text-gray-500 leading-relaxed text-sm space-y-3">
-                            {{ product.description }}
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-16">
-                    <h2 class="text-xl font-semibold mb-6 tracking-wide">
-                        Technical Characteristics
-                    </h2>
-                    <div class="specs">
-                        {% for spec in product.specs %}
-                            <div class="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
-                                <span>
-                                    {{ spec.label }}
-                                </span>
-                                <span class="text-right">
-                                    {{ spec.value }}
-                                </span>
-                            </div>
+                            <img src="{{ image.image }}" alt="Thumbnail" class="w-full h-24 object-cover cursor-pointer hover:opacity-80 transition" />
                         {% endfor %}
-                    </div>
+                    {% else %}
+                        {% for i in 1..3 %}
+                            <img src="/images/noimage.jpg" alt="Thumbnail" class="w-full h-24 object-cover cursor-pointer hover:opacity-80 transition" />
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-        {% endblock %}
-        
+            <div>
+                <h1 class="text-3xl font-semibold tracking-wide mb-2">
+                    {{ product.name }}
+                </h1>
+                <p class="accentcolor mb-4">
+                    Année:
+                    {{ product.year }}
+                </p>
+                <p class="accentcolor mb-4">
+                    Prix:
+                    {{ product.price }}
+                    €
+                </p>
+                <p class="text-gray-500 leading-relaxed text-sm space-y-3">
+                    {{ product.description }}
+                </p>
+            </div>
+        </div>
+        <div class="mt-16">
+            <h2 class="text-xl font-semibold mb-6 tracking-wide">
+                Technical Characteristics
+            </h2>
+            <div class="specs">
+                {% for spec in product.features %}
+                    <div class="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
+                        <span>
+                            {{ spec.name }}
+                        </span>
+                        <span class="text-right">
+                            {{ spec.value }}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

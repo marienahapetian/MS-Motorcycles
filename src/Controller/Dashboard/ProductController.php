@@ -4,25 +4,21 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 class ProductController extends AbstractController
 {
     #[Route("/dashboard/products", "dashboard_products")]
-    public function list(): Response
+    public function list(ManagerRegistry $doctrine): Response
     {
-        $products = [
-            ["id" => 1, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-            ["id" => 2, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-            ["id" => 3, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-            ["id" => 4, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-            ["id" => 5, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-            ["id" => 6, "name" => "Harley Davidson", "type" => "bike", "price" => "2500€", "createdAt" => "2026-03-28"],
-        ];
+        $products = $doctrine->getRepository(Product::class)->findAll();
         $currentPage = 1;
         $totalPages = 5;
         return $this->render("dashboard/product/list.html.twig", [
@@ -33,10 +29,10 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/edit/{id}', name: 'product_edit')]
-    public function edit(EntityManager $entityManager, Request $request): Response
+    public function edit(EntityManager $entityManager, Request $request, Product $product): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $product = new Product();
+        // $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -54,15 +50,20 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/add', name: 'product_add')]
-    public function add(Request $request): Response
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $product = new Product();
+        $product->setName("Harley Davidson 2.0");
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
+            $product->setAdded(new DateTime());
+            $entityManager->persist($product);
+            $entityManager->flush();
+
             return $this->redirectToRoute('dashboard_products');
         }
         return $this->render("dashboard/product/add.html.twig", ['form' => $form]);

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,9 +12,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class ShopController extends AbstractController
 {
     #[Route('/shop', name: 'shop')]
-    public function index(Request $request): Response
+    public function index(Request $request, ManagerRegistry $doctrine): Response
     {
         $currentPage = $request->query->getInt('page', 1);
+        $products = $doctrine->getRepository(Product::class)->findAll();
         return $this->render('shop.html.twig', [
             'page_title' => 'Shop',
             'categories' => [
@@ -31,48 +34,7 @@ class ShopController extends AbstractController
                 ['name' => 'black', 'hex' => '#000000'],
                 ['name' => 'white', 'hex' => '#ecf0f1'],
             ],
-            'products' => [
-                [
-                    'id' => 1,
-                    'name' => 'Harley Davidson',
-                    'image' => '/images/uploads/S0-harley-davidson-prepare-un-nouveau-custom-pour-2021-186722.jpg',
-                    'slug' => 'harley_davidson'
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Harley Davidson',
-                    'image' => '/images/uploads/carlos-unique-beitragsbild-545x364.jpg.pagespeed.ce.7i8a8sDMzQ.jpg',
-                    'slug' => 'harley_davidson'
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Kawasaki Ninja',
-                    'image' => '/images/uploads/blue-lion-beitragsbild-545x364.jpg.pagespeed.ce.yD-EoaKWfA.jpg',
-                    'slug' => 'harley_davidson'
-
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Harley Davidson',
-                    'image' => '/images/uploads/S0-harley-davidson-prepare-un-nouveau-custom-pour-2021-186722.jpg',
-                    'slug' => 'harley_davidson'
-
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Harley Davidson',
-                    'image' => '/images/uploads/carlos-unique-beitragsbild-545x364.jpg.pagespeed.ce.7i8a8sDMzQ.jpg',
-                    'slug' => 'harley_davidson'
-
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Kawasaki Ninja',
-                    'image' => '/images/uploads/blue-lion-beitragsbild-545x364.jpg.pagespeed.ce.yD-EoaKWfA.jpg',
-                    'slug' => 'harley_davidson'
-
-                ],
-            ],
+            'products' => $products,
             'totalPages' => 5,
             'currentPage' => $currentPage,
             'hasSidebar' => true
