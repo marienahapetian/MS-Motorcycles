@@ -38,8 +38,8 @@
                         <img src="{{ asset('images/magnifying-glass.png') }}" alt="Search Icon" />
                     </a>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('app_logout') }}" class="icon user">
-                            <img src="{{ asset('images/logout.png') }}" alt="User Logout Icon" />
+                        <a href="{{ path('dashboard_home') }}" class="icon user">
+                            <img src="{{ asset('images/user.png') }}" alt="User Account Icon" />
                         </a>
                     {% endif %}
                 </div>
