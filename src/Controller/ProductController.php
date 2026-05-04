@@ -11,9 +11,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class ProductController extends AbstractController
 {
     #[Route('/product/{id<\d+>}-{slug}', name: 'product_show')]
-    public function index($id, ManagerRegistry $doctrine): Response
+    public function index($id, $slug, ManagerRegistry $doctrine): Response
     {
         $product = $doctrine->getRepository(Product::class)->find($id);
+        if (!$product || $product->getSlug() != $slug)
+            throw $this->createNotFoundException('Product not found');
+
         return $this->render("single.html.twig", [
             "page_title" => "Bike",
             "product" => $product

@@ -24,22 +24,23 @@
             <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body class="min-h-screen {{ app.request.attributes.get('_route') }}"></body>
+    <body class="min-h-screen {{ app.request.attributes.get('_route') }}">
 
-    {% block body %}
-        {% block header %}
-            {% include 'partials/_header.html.twig' %}
+        {% block body %}
+            {% block header %}
+                {% include 'partials/_header.html.twig' %}
+            {% endblock %}
+
+            <div class="{{ hasSidebar ? 'flex' : 'content' }}">
+
+                {% block sidebar %}{% endblock %}
+
+                {% block content %}{% endblock %}
+            </div>
+
+            {% block footer %}
+                {% include 'partials/_footer.html.twig' %}
+            {% endblock %}
         {% endblock %}
-
-        <div class="{{ hasSidebar ? 'flex' : 'content' }}">
-
-            {% block sidebar %}{% endblock %}
-
-            {% block content %}{% endblock %}
-        </div>
-
-        {% block footer %}
-            {% include 'partials/_footer.html.twig' %}
-        {% endblock %}
-    {% endblock %}
-</html></body></html>
+    </body>
+</html>
