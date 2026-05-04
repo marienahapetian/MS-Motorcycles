@@ -31,7 +31,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/edit/{id}', name: 'product_edit')]
-    public function edit(EntityManager $entityManager, Request $request, Product $product): Response
+    public function edit(EntityManager $entityManager, Request $request, Product $product, SluggerInterface $slugger): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // $product = new Product();
@@ -40,6 +40,28 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $files = $form->get('images')->getData();
+            foreach ($files as $index => $file) {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeName = $slugger->slug($originalName);
+                $newFilename = $safeName . '-' . uniqid() . '.' . $file->guessExtension();
+
+                $file->move(
+                    $this->getParameter('uploads_dir'),
+                    $newFilename
+                );
+
+                $image = new ProductImage();
+                $image->setImage('/images/uploads/' . $newFilename);
+
+                if (!$product->getMainImage()) {
+                    $image->setIsMain(true);
+                } else {
+                    $image->setIsMain(false);
+                }
+
+                $product->addImage($image);
+            }
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -100,6 +122,38 @@ class ProductController extends AbstractController
         $entityManager = $doctrine->getManager();
         $entityManager->remove($product);
         $entityManager->flush();
+        return $this->redirectToRoute('dashboard_products');
+    }
+
+    #[Route('/dashboard/product/image/{id}/delete', name: 'product_image_delete')]
+    public function deleteImage(ProductImage $image, EntityManagerInterface $entityManager): Response
+    {
+        $filePath = $this->getParameter('uploads_dir') . '/' . basename($image->getImage());
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $entityManager->remove($image);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('dashboard_products');
+    }
+
+    #[Route('/dashboard/product/image/{id}/main', name: 'product_image_main')]
+    public function makeMainImage(ProductImage $image, EntityManagerInterface $entityManager): Response
+    {
+        $product = $image->getProduct();
+        foreach ($product->getImages() as $img) {
+            $img->setIsMain(false);
+        }
+
+        $image->setIsMain(true);
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Main image updated successfully');
+
         return $this->redirectToRoute('dashboard_products');
     }
 }

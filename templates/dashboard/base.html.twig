@@ -36,7 +36,24 @@
                 {% include 'dashboard/partials/_sidebar.html.twig' %}
             {% endblock %}
 
-            {% block content %}{% endblock %}
+            {% block rightcontent %}
+                <div class="flex flex-col w-full">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="p-3 mb-2
+                                    {% if label == 'success' %} bg-green-100 text-green-800 border-green-800
+                                    {% elseif label == 'error' %} bg-red-100 text-red-800 border-red-800
+                                    {% else %} bg-gray-100 text-gray-800
+                                    {% endif %}
+                                ">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% block content %}{% endblock %}
+                </div>
+
+            {% endblock %}
         </div>
 
     {% endblock %}
