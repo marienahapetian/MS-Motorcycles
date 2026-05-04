@@ -2,7 +2,7 @@
 {% block content %}
     <main class="px-10 py-10 flex-1">
         <h1 class="text-3xl font-semibold mb-8">
-            All Messages
+            Toutes les messages
         </h1>
         <div class="flex justify-between items-center mb-4">
             <input type="text" placeholder="Search" class="border border-gray-400 rounded-md px-3 py-1 text-sm"></div>
@@ -14,38 +14,43 @@
                                 #
                             </th>
                             <th class="px-3 py-2">
-                                Sent By
+                                Nom Complet
                             </th>
                             <th class="px-3 py-2">
-                                Subject
+                                Email
+                            </th>
+                            <th class="px-3 py-2">
+                                Sujet
                             </th>
                             <th class="px-3 py-2">
                                 Message
                             </th>
                             <th class="px-3 py-2">
-                                Recieved
+                                Reçue
                             </th>
                             <th class="px-3 py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for msg in msgs %}
-                            <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-gray-200' }}">
+                            <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-gray-200' }} {{ not msg.seen ? 'font-bold' : '' }} ">
                                 <td class="px-3 py-2">
                                     {{ msg.id }}
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ msg.sentBy }}
+                                    {{ msg.name ~ ' ' ~  msg.lastname }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ msg.sender }}
                                 </td>
                                 <td class="px-3 py-2">
                                     {{ msg.subject }}
                                 </td>
                                 <td class="px-3 py-2">
                                     {{ msg.message }}
-                                    €
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ msg.recieved|date('d M H:i, Y') }}
+                                    {{ msg.sent|date('d M H:i, Y') }}
                                 </td>
                                 <td class="px-3 py-2 space-x-2">
                                     <a href="{{ path('dashboard_message_view', {id: msg.id }) }}" class="text-blue-600 hover:underline">

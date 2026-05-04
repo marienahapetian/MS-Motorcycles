@@ -131,18 +131,47 @@
             Contact Us!
         </h2>
         <div class="max-w-3xl mx-auto px-4 flex flex-col gap-6.25">
-            <form class="space-y-6">
-                <div class="grid md:grid-cols-2 gap-6">
-                    <input type="text" placeholder="Nom" class="text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white" />
-                    <input type="text" placeholder="Prenom" class="text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white" />
-                </div>
-                <input type="email" placeholder="Email" class="text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white" />
-                <input type="text" placeholder="Subject" class="text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white" />
-                <textarea rows="5" placeholder="Message" class="text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white resize-none"></textarea>
-                <button type="submit" class="cursor-pointer text-center w-full text-white py-4 text-lg font-semibold transition">
-                    Send
-                </button>
-            </form>
+            {{ form_start(contactForm, {attr: {class: 'space-y-6' }}
+            ) }}
+            <div class="grid md:grid-cols-2 gap-6">
+                {{ form_widget(contactForm.lastname, {
+                    attr: {
+                        placeholder: 'Nom',
+                        class: 'text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white'
+                    }
+                }) }}
+                {{ form_widget(contactForm.name, {
+                    attr: {
+                        placeholder: 'Prénom',
+                        class: 'text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white'
+                    }
+                }) }}
+            </div>
+            {{ form_widget(contactForm.sender, {
+                    attr: {
+                        placeholder: 'Email',
+                        class: 'text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white'
+                    }
+                }) }}
+            {{ form_widget(contactForm.subject, {
+                    attr: {
+                        placeholder: 'Sujet',
+                        class: 'text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white'
+                    }
+                }) }}
+            {{ form_widget(contactForm.message, {
+                attr: {
+                    rows: 5,
+                    placeholder: 'Message',
+                    class: 'text-center w-full bg-transparent border-2 border-white text-white placeholder-white px-4 py-3 outline-none focus:ring-2 focus:ring-white resize-none'
+                }
+            }) }}
+            {{ form_widget(contactForm.submit, {
+                attr: {
+                    class: 'cursor-pointer w-full text-white py-4 text-lg font-semibold transition hover:opacity-80'
+                }
+            }) }}
+            {{ form_end(contactForm) }}
         </div>
     </section>
     {% block page_contents %}{% endblock %}

@@ -70,7 +70,6 @@ class ProductController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $product = new Product();
-        $product->setName("Harley Davidson 2.0");
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 

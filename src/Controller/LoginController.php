@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\LoginFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +18,10 @@ final class LoginController extends AbstractController
         if ($security->getUser()) {
             return $this->redirectToRoute('dashboard_home');
         }
+        $u = new User();
+        $loginForm = $this->createForm(LoginFormType::class, $u);
         $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('login/index.html.twig', ['error' => $error, 'lastUsername' => $lastUsername]);
+        return $this->render('login/index.html.twig', ['loginForm' => $loginForm, 'error' => $error]);
     }
 
     #[Route('/logout', name: 'app_logout')]

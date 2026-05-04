@@ -2,14 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
+use App\Form\MessageFormType;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function index(): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $services = [
             ["title" => 'Repair', "text" => "Your Bike is having a trouble? MsMotorcycles team includes professionals that will resolve your issues within a matter of days!", "icon" => 'repair'],
@@ -24,10 +29,25 @@ class HomeController extends AbstractController
 
         ];
 
+        $message = new Message();
+        $contactForm = $this->createForm(MessageFormType::class, $message);
+        $contactForm->handleRequest($request);
+
+        if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+            $message->setSent(new DateTime())->setSeen(false);
+            $entityManager->persist($message);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Message Envoyée!');
+
+            return $this->redirect($this->generateUrl('homepage') . '#contact');
+        }
+
         return $this->render('home.html.twig', [
             'page_title' => 'Home',
             'services' => $services,
-            'bikes' => $bikes
+            'bikes' => $bikes,
+            'contactForm' => $contactForm
         ]);
     }
 }

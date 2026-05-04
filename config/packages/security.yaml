@@ -22,10 +22,12 @@ security:
             logout: 
                 path: app_logout
             form_login:
+                username_parameter: email
+                password_parameter: password
                 login_path: app_login
                 check_path: app_login
                 default_target_path: dashboard_home
-                enable_csrf: true
+                enable_csrf: false
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
