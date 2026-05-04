@@ -5,6 +5,7 @@ namespace App\Controller\Dashboard;
 use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
+use App\Services\ImageUploader;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,10 +32,9 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/edit/{id}', name: 'product_edit')]
-    public function edit(EntityManager $entityManager, Request $request, Product $product, SluggerInterface $slugger): Response
+    public function edit(EntityManager $entityManager, Request $request, Product $product, SluggerInterface $slugger, ImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        // $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -42,28 +42,20 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $files = $form->get('images')->getData();
             foreach ($files as $index => $file) {
-                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeName = $slugger->slug($originalName);
-                $newFilename = $safeName . '-' . uniqid() . '.' . $file->guessExtension();
 
-                $file->move(
-                    $this->getParameter('uploads_dir'),
-                    $newFilename
-                );
+                $newFilename = $imageUploader->upload($file, $slugger);
 
                 $image = new ProductImage();
                 $image->setImage('/images/uploads/' . $newFilename);
 
-                if (!$product->getMainImage()) {
-                    $image->setIsMain(true);
-                } else {
-                    $image->setIsMain(false);
-                }
+                $image->setIsMain(!$product->getMainImage());
 
                 $product->addImage($image);
             }
             $entityManager->persist($product);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Article Modifié!');
 
             return $this->redirectToRoute('dashboard_products');
         }
@@ -74,7 +66,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/add', name: 'product_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $product = new Product();
@@ -87,28 +79,18 @@ class ProductController extends AbstractController
             $product->setAdded(new DateTime());
             $files = $form->get('images')->getData();
             foreach ($files as $index => $file) {
-                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeName = $slugger->slug($originalName);
-                $newFilename = $safeName . '-' . uniqid() . '.' . $file->guessExtension();
-
-                $file->move(
-                    $this->getParameter('uploads_dir'),
-                    $newFilename
-                );
+                $newFilename = $imageUploader->upload($file, $slugger);
 
                 $image = new ProductImage();
                 $image->setImage('/images/uploads/' . $newFilename);
 
-                if ($index === 0) {
-                    $image->setIsMain(true);
-                } else {
-                    $image->setIsMain(false);
-                }
+                $image->setIsMain(!$product->getMainImage());
 
                 $product->addImage($image);
             }
             $entityManager->persist($product);
             $entityManager->flush();
+            $this->addFlash('success', 'Article crée!');
 
             return $this->redirectToRoute('dashboard_products');
         }
@@ -122,6 +104,8 @@ class ProductController extends AbstractController
         $entityManager = $doctrine->getManager();
         $entityManager->remove($product);
         $entityManager->flush();
+        $this->addFlash('success', 'Article Supprimé!');
+
         return $this->redirectToRoute('dashboard_products');
     }
 
@@ -136,6 +120,8 @@ class ProductController extends AbstractController
 
         $entityManager->remove($image);
         $entityManager->flush();
+
+        $this->addFlash('success', 'Image supprimé!');
 
         return $this->redirectToRoute('dashboard_products');
     }
@@ -152,7 +138,7 @@ class ProductController extends AbstractController
 
         $entityManager->flush();
 
-        $this->addFlash('success', 'Main image updated successfully');
+        $this->addFlash('success', 'Image Principale Changé!');
 
         return $this->redirectToRoute('dashboard_products');
     }
