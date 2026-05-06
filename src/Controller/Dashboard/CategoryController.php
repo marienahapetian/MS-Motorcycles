@@ -4,7 +4,9 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,16 +15,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class CategoryController extends AbstractController
 {
     #[Route("/dashboard/categories", "dashboard_categories")]
-    public function list_categories(): Response
+    public function list_categories(EntityManagerInterface $entityManager): Response
     {
-        $categories = [
-            ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 3, "name" => "Oil", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 4, "name" => "Jacket", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 5, "name" => "Bracelet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 6, "name" => "T-Shirt", "count" => 10, "createdAt" => "2026-03-28"],
-        ];
+        $categories = $entityManager->getRepository(Category::class)->findAll();
         $currentPage = 1;
         $totalPages = 5;
         return $this->render("dashboard/category/list.html.twig", [
@@ -33,16 +28,15 @@ class CategoryController extends AbstractController
     }
 
     #[Route("/dashboard/category/edit/{id}", "category_edit")]
-    public function edit(Request $request, EntityManager $entityManager): Response
+    public function edit(Request $request, EntityManager $entityManager, Category $category): Response
     {
-        $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($category);
             $entityManager->flush();
 
-            return $this->redirectToRoute('dashboard_products');
+            return $this->redirectToRoute('dashboard_categories');
         }
 
         return $this->render("dashboard/category/edit.html.twig", [
@@ -52,7 +46,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route("/dashboard/category/add", "category_add")]
-    public function add(Request $request): Response
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -60,6 +54,9 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $category = $form->getData();
+            $category->setCreatedAt(new DateTime());
+            $entityManager->persist($category);
+            $entityManager->flush();
             return $this->redirectToRoute('dashboard_categories');
         }
         return $this->render("dashboard/category/add.html.twig", ['form' => $form]);

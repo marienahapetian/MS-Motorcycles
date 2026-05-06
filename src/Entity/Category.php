@@ -32,9 +32,19 @@ class Category
     #[ORM\ManyToMany(targetEntity: Feature::class, mappedBy: 'categories')]
     private Collection $features;
 
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'categories')]
+    private Collection $Products;
+
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
     public function __construct()
     {
         $this->features = new ArrayCollection();
+        $this->Products = new ArrayCollection();
     }
 
     public function getFeatures(): Collection
@@ -67,6 +77,42 @@ class Category
     public function setIcon(?string $icon): static
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->Products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->Products->contains($product)) {
+            $this->Products->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        $this->Products->removeElement($product);
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

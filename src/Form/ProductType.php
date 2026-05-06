@@ -28,10 +28,12 @@ class ProductType extends AbstractType
             ->add('price')
             ->add('year')
             ->add('description', TextareaType::class)
-            ->add('category', EntityType::class, [
+            ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Choisir le type',
+                'multiple' => true,
+                'by_reference' => false,
+                'expanded' => false,
                 'required' => true,
             ])
             ->add('brand', EntityType::class, [

@@ -52,12 +52,6 @@ class Product
     #[Assert\PositiveOrZero(message: 'Le prix doit être positif')]
     private ?float $price = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: "Veuillez sélectionner une catégorie")]
-    #[Assert\Type(Category::class)]
-    private ?Category $category = null;
-
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
     #[Assert\Length(
@@ -87,11 +81,18 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?\DateTime $modified = null;
 
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'Products')]
+    private Collection $categories;
+
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->features = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,17 +149,6 @@ class Product
     {
         $this->price = $price;
 
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
         return $this;
     }
 
@@ -243,6 +233,33 @@ class Product
     public function setModified(?\DateTime $modified): static
     {
         $this->modified = $modified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeProduct($this);
+        }
 
         return $this;
     }
