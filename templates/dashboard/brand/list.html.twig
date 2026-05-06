@@ -2,11 +2,11 @@
 {% block content %}
     <main class="px-10 py-10 flex-1">
         <h1 class="text-3xl font-semibold mb-8">
-            Catégories de produits
+            Marques de produits
         </h1>
         <div class="flex justify-between items-center mb-4">
-            <a href="{{ path('category_add') }}" class="bg-indigo-300 text-gray-800 px-4 py-2 rounded-md font-medium">
-                + Ajouter une nouvelle catégorie
+            <a href="{{ path('brand_add') }}" class="bg-indigo-300 text-gray-800 px-4 py-2 rounded-md font-medium">
+                + Ajouter une marque
             </a>
             <input type="text" placeholder="Rechercher" class="border border-gray-400 rounded-md px-3 py-1 text-sm"></div>
             <div class="overflow-x-auto">
@@ -23,32 +23,38 @@
                                 Total d'articles
                             </th>
                             <th class="px-3 py-2">
+                                Catégories
+                            </th>
+                            <th class="px-3 py-2">
                                 Ajouté
                             </th>
                             <th class="px-3 py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for category in categories %}
+                        {% for brand in brands %}
                             <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-gray-200' }}">
                                 <td class="px-3 py-2">
-                                    {{ category.id }}
+                                    {{ brand.id }}
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ category.name }}
+                                    {{ brand.name }}
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ category.products.count }}
+                                    {{ brand.products.count }}
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ category.createdAt|date('d/m/Y') }}
+                                    {{ brand.categories | map(c => c.name) | join(', ') }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ brand.createdAt|date('d/m/Y') }}
                                 </td>
                                 <td class="px-3 py-2 space-x-2 flex">
-                                    <a href="{{ path('category_edit', {id: category.id}) }}" class="text-blue-600 hover:underline">
+                                    <a href="{{ path('brand_edit', {id: brand.id}) }}" class="text-blue-600 hover:underline">
                                         Edit
                                     </a>
-                                    <form method="POST" action="{{ path('category_delete', {id:category.id}) }}">
-                                        <button type="submit" href="{{ path('category_delete', {id:category.id}) }}" class="text-red-600 cursor-pointer hover:underline" onclick="return confirm('Vous etes sure?')" title="delete" class="cursor-pointer">
+                                    <form method="POST" action="{{ path('brand_delete', {id:brand.id}) }}">
+                                        <button type="submit" href="{{ path('brand_delete', {id:brand.id}) }}" class="text-red-600 cursor-pointer hover:underline" onclick="return confirm('Vous etes sure?')" title="delete" class="cursor-pointer">
                                             Supprimer
                                         </button>
                                     </form>

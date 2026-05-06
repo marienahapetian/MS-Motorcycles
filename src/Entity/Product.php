@@ -28,7 +28,7 @@ class Product
 
     #[ORM\ManyToOne(targetEntity: Brand::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: "Veuillez sélectionner une ;qraue")]
+    #[Assert\NotNull(message: "Veuillez sélectionner une marque")]
     #[Assert\Type(Brand::class)]
     private ?Brand $brand = null;
 

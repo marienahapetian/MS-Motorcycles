@@ -20,6 +20,7 @@ class CategoryType extends AbstractType
             ->add('name')
             ->add('icon', FileType::class, [
                 'required' => false,
+                'mapped' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '2048k',

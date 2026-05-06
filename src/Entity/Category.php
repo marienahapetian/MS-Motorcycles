@@ -41,10 +41,17 @@ class Category
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
 
+    /**
+     * @var Collection<int, Brand>
+     */
+    #[ORM\ManyToMany(targetEntity: Brand::class, mappedBy: 'Categories')]
+    private Collection $brands;
+
     public function __construct()
     {
         $this->features = new ArrayCollection();
         $this->Products = new ArrayCollection();
+        $this->brands = new ArrayCollection();
     }
 
     public function getFeatures(): Collection
@@ -113,6 +120,33 @@ class Category
     public function setCreatedAt(\DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Brand>
+     */
+    public function getBrands(): Collection
+    {
+        return $this->brands;
+    }
+
+    public function addBrand(Brand $brand): static
+    {
+        if (!$this->brands->contains($brand)) {
+            $this->brands->add($brand);
+            $brand->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrand(Brand $brand): static
+    {
+        if ($this->brands->removeElement($brand)) {
+            $brand->removeCategory($this);
+        }
 
         return $this;
     }
