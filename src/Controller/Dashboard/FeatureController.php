@@ -2,9 +2,12 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Entity\Category;
 use App\Entity\Feature;
 use App\Form\FeatureType;
+use Doctrine\Migrations\Configuration\EntityManager\ManagerRegistryEntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,15 +17,10 @@ class FeatureController extends AbstractController
 {
 
     #[Route("/dashboard/features", "dashboard_features")]
-    public function list(): Response
+    public function list(ManagerRegistry $doctrine): Response
     {
-        $features = [
-            ["id" => 1, "name" => "Folded w Wheels", "categories" => ["bike"], "values" => ["32.5″L x 18.5″W x 16.5″H"], "createdAt" => "2026-03-28"],
-            ["id" => 2, "name" => "Folded wo Wheels", "categories" => ["bike"], "values" => ["32.5″L x 18.5″W x 16.5″H"], "createdAt" => "2026-03-28"],
-            ["id" => 3, "name" => "Size", "categories" => ["bracelet"], "values" => ["xs", "s", "m", "TU"], "createdAt" => "2026-03-28"],
-            ["id" => 4, "name" => "Weight", "categories" => ["bike", "bracelet", "oil"], "values" => ["1kg", "2kg", "3kg"], "createdAt" => "2026-03-28"],
-            ["id" => 5, "name" => "Color", "categories" => ["bike", "tshirt", "bracelet"], "values" => ["red", "green", "blue"], "createdAt" => "2026-03-28"],
-        ];
+        $features = $doctrine->getRepository(Feature::class)->findAll();
+
         $currentPage = 1;
         $totalPages = 5;
         return $this->render("dashboard/feature/list.html.twig", [
@@ -33,55 +31,61 @@ class FeatureController extends AbstractController
     }
 
     #[Route("/dashboard/feature/edit/{id}", "feature_edit")]
-    public function edit(Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Feature $feature, ManagerRegistry $doctrine): Response
     {
-        $feature = new Feature();
         $form = $this->createForm(FeatureType::class, $feature);
         $form->handleRequest($request);
+
+        $entityManager = $doctrine->getManager();
+
+        $categories = $doctrine->getRepository(Category::class)->findAll();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($feature);
             $entityManager->flush();
 
             return $this->redirectToRoute('dashboard_features');
         }
-
-        $categories = [
-            ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 3, "name" => "Oil", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 4, "name" => "Jacket", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 5, "name" => "Bracelet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 6, "name" => "T-Shirt", "count" => 10, "createdAt" => "2026-03-28"],
-        ];
         return $this->render("dashboard/feature/edit.html.twig", [
             'feature' => $feature,
-            'categories' => $categories,
-            'form' => $form
+            'form' => $form,
+            'categories' => $categories
         ]);
     }
 
     #[Route("/dashboard/feature/add", "feature_add")]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function add(Request $request, ManagerRegistry $doctrine): Response
     {
         $feature = new Feature();
         $form = $this->createForm(FeatureType::class, $feature);
         $form->handleRequest($request);
 
+        $entityManager = $doctrine->getManager();
+
+        $categories = $doctrine->getRepository(Category::class)->findAll();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $feature = $form->getData();
+            $entityManager->persist($feature);
+            $entityManager->flush();
             return $this->redirectToRoute('dashboard_features');
         }
-        $categories = [
-            ["id" => 1, "name" => "Bike", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 2, "name" => "Helmet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 3, "name" => "Oil", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 4, "name" => "Jacket", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 5, "name" => "Bracelet", "count" => 10, "createdAt" => "2026-03-28"],
-            ["id" => 6, "name" => "T-Shirt", "count" => 10, "createdAt" => "2026-03-28"],
-        ];
+
         return $this->render("dashboard/feature/add.html.twig", [
             'categories' => $categories,
             'form' => $form
         ]);
+    }
+
+    #[Route('/feature/{id}/delete', name: 'feature_delete')]
+    public function delete(Feature $feature, ManagerRegistry $doctrine)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($feature);
+        $entityManager->flush();
+        $this->addFlash('success', 'Caractéristique Supprimé!');
+
+        return $this->redirectToRoute('dashboard_features');
     }
 }

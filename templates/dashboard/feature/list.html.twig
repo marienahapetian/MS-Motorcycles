@@ -22,9 +22,9 @@
                             <th class="px-3 py-2">
                                 Categories
                             </th>
-                            <th class="px-3 py-2">
+                            {# <th class="px-3 py-2">
                                 Values
-                            </th>
+                            </th> #}
                             <th class="px-3 py-2"></th>
                         </tr>
                     </thead>
@@ -38,18 +38,20 @@
                                     {{ feature.name }}
                                 </td>
                                 <td class="px-3 py-2">
-                                    {{ feature.categories|join(', ') }}
+                                    {{ feature.categories | map(c => c.name) |join(', ') }}
                                 </td>
-                                <td class="px-3 py-2">
+                                {# <td class="px-3 py-2">
                                     {{ feature.values|join(', ') }}
-                                </td>
-                                <td class="px-3 py-2 space-x-2">
+                                </td> #}
+                                <td class="px-3 py-2 space-x-2 flex">
                                     <a href="{{ path('feature_edit', {id: feature.id}) }}" class="text-blue-600 hover:underline">
                                         Edit
                                     </a>
-                                    <a href="#" class="text-red-600 hover:underline">
-                                        Delete
-                                    </a>
+                                    <form method="POST" action="{{ path('feature_delete', {id:feature.id}) }}">
+                                        <button type="submit" href="{{ path('feature_delete', {id:feature.id}) }}" class="text-red-600 cursor-pointer hover:underline" onclick="return confirm('Vous etes sure?')" title="delete" class="cursor-pointer">
+                                            Supprimer
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
