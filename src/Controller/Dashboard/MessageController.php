@@ -18,7 +18,7 @@ class MessageController extends AbstractController
         $currentPage = 1;
         $totalPages = 5;
 
-        return $this->render("dashboard/messages.html.twig", [
+        return $this->render("dashboard/message/list.html.twig", [
             'msgs' => $messages,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
