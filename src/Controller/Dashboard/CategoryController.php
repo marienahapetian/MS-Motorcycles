@@ -18,15 +18,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class CategoryController extends AbstractController
 {
     #[Route("/dashboard/categories", "dashboard_categories")]
-    public function list_categories(EntityManagerInterface $entityManager): Response
+    public function list_categories(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $categories = $entityManager->getRepository(Category::class)->findAll();
-        $currentPage = 1;
-        $totalPages = 5;
+        $categories = $entityManager->getRepository(Category::class)->findAllCategories($request->query->getInt('page', 1));
         return $this->render("dashboard/category/list.html.twig", [
             'categories' => $categories,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'data' => $categories,
         ]);
     }
 

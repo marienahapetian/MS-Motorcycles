@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,12 +17,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class BrandController extends AbstractController
 {
     #[Route('/dashboard/brands', name: 'dashboard_brands')]
-    public function list_brands(EntityManagerInterface $entityManager): Response
+    public function list_brands(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $brands = $entityManager->getRepository(Brand::class)->findAll();
-        $currentPage = 1;
-        $totalPages = 5;
-        return $this->render('dashboard/brand/list.html.twig', ['brands' => $brands, 'totalPages' => $totalPages, 'currentPage' => $currentPage]);
+        $brands = $entityManager->getRepository(Brand::class)->findAllBrands($request->query->getInt('page', 1));
+        return $this->render('dashboard/brand/list.html.twig', ['brands' => $brands, 'data' => $brands]);
     }
 
     #[Route("/dashboard/brand/edit/{id}", "brand_edit")]

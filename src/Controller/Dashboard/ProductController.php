@@ -19,15 +19,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ProductController extends AbstractController
 {
     #[Route("/dashboard/products", "dashboard_products")]
-    public function list(ManagerRegistry $doctrine): Response
+    public function list(Request $request, EntityManagerInterface $em): Response
     {
-        $products = $doctrine->getRepository(Product::class)->findAll();
-        $currentPage = 1;
-        $totalPages = 5;
+        $products = $em->getRepository(Product::class)->findAllProducts($request->query->getInt('page', 1));
         return $this->render("dashboard/product/list.html.twig", [
             'products' => $products,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'data' => $products
         ]);
     }
 
@@ -52,6 +49,7 @@ class ProductController extends AbstractController
 
                 $product->addImage($image);
             }
+            $product->setModified(new DateTime());
             $entityManager->persist($product);
             $entityManager->flush();
 

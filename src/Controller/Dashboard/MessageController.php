@@ -6,22 +6,20 @@ use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class MessageController extends AbstractController
 {
     #[Route("/dashboard/messages", "dashboard_messages")]
-    public function list(ManagerRegistry $doctrine): Response
+    public function list(EntityManagerInterface $em, Request $request): Response
     {
-        $messages = $doctrine->getRepository(Message::class)->findAll();
-        $currentPage = 1;
-        $totalPages = 5;
+        $messages = $em->getRepository(Message::class)->findAllMessages($request->query->getInt('page', 1));
 
         return $this->render("dashboard/message/list.html.twig", [
             'msgs' => $messages,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'data' => $messages
         ]);
     }
 
