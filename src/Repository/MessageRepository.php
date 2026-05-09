@@ -24,7 +24,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('p')
             ->getQuery();
-        return $this->paginator->paginate($query, $page, 3);
+        return $this->paginator->paginate($query, $page);
     }
 
     //    /**

@@ -19,11 +19,11 @@ class ProductRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function findAllProducts(int $page)
+    public function findAllProducts(int $page, int $perpage = 15)
     {
         $query = $this->createQueryBuilder('p')
             ->getQuery();
-        return $this->paginator->paginate($query, $page, 3);
+        return $this->paginator->paginate($query, $page, $perpage);
     }
 
     //    /**

@@ -2,11 +2,11 @@
     <div class="flex gap-3 justify-center">
         {% for page in pagesInRange %}
             {% if page != current %}
-                <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="px-3 py-1">
+                <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="w-10 h-10 flex items-center justify-center text-sm font-medium bg-gray-200 text-gray-600 hover:bg-gray-300 transition ">
                     {{ page }}
                 </a>
             {% else %}
-                <span class="page-link px-3 py-1 bg-white">
+                <span class="w-10 h-10  flex items-center justify-center text-sm font-medium page-link px-3 py-1 bg-gray-800 text-white">
                     {{ page }}
                 </span>
             {% endif %}
@@ -22,7 +22,7 @@
     </p>
 {% else %}
     <p>
-        Affichage des
+        Affichage de
         {{ currentItemCount }}
         articles
         sur

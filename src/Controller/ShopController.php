@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +13,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class ShopController extends AbstractController
 {
     #[Route('/shop', name: 'shop')]
-    public function index(Request $request, ManagerRegistry $doctrine): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $currentPage = $request->query->getInt('page', 1);
-        $products = $doctrine->getRepository(Product::class)->findAll();
+        $products = $em->getRepository(Product::class)->findAllProducts($request->query->getInt('page', 1));
         return $this->render('shop.html.twig', [
             'page_title' => 'Shop',
             'categories' => [
@@ -35,8 +35,7 @@ class ShopController extends AbstractController
                 ['name' => 'white', 'hex' => '#ecf0f1'],
             ],
             'products' => $products,
-            'totalPages' => 5,
-            'currentPage' => $currentPage,
+            'data' => $products,
             'hasSidebar' => true
         ]);
     }
