@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Message;
 use App\Form\MessageFormType;
+use App\Repository\ProductRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, ProductRepository $pr): Response
     {
         $services = [
             ["title" => 'Repair', "text" => "Your Bike is having a trouble? MsMotorcycles team includes professionals that will resolve your issues within a matter of days!", "icon" => 'repair'],
@@ -22,12 +23,7 @@ class HomeController extends AbstractController
             ["title" => 'Offers', "text" => "Apart from having the best prices on the market, we occasionally offer Friends&Family discounts to our customers!", "icon" => 'offers'],
 
         ];
-        $bikes = [
-            ["name" => 'Harley Davidson', "desc" => "The Star of bikes, lorem ipsum dolor sit amet", "image" => 'uploads/9662854e-45ef-4fee-9be0-4fbbfe774be4.jpg'],
-            ["name" => 'Kawasaki Ninja', "desc" => "The Star of bikes, lorem ipsum dolor sit amet", "image" => 'uploads/carlos-unique-beitragsbild-545x364.jpg.pagespeed.ce.7i8a8sDMzQ.jpg'],
-            ["name" => 'Harley Davidson', "desc" => "The Star of bikes, lorem ipsum dolor sit amet", "image" => 'uploads/S0-harley-davidson-prepare-un-nouveau-custom-pour-2021-186722.jpg'],
-
-        ];
+        $bikes = $pr->getAllByCategory(1, 3); //catId 1, limit 3
 
         $message = new Message();
         $contactForm = $this->createForm(MessageFormType::class, $message);

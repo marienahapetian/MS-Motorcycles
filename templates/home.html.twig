@@ -69,28 +69,29 @@
     <section id="articles" class="dotted-bg text-center p-15">
         <img src="{{ asset('images/motorcycle.png') }}" class="h-22.5" alt="M&S Moto Bikes" />
         <h3 class="mt-2.5">
-            What We Offer
+            Ce que nous offrons
         </h3>
         <h2 class="mb-11">
-            Our Bikes
+            Nos Motos
         </h2>
         <div class="max-w-8xl mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-7.5">
                 {% for bike in bikes %}
                     <div class="card relative pb-3.5">
                         <div class="icon-cont mb-6.25 h-70 overflow-hidden">
-                            <img src="{{ asset('images/' ~ bike.image) }}" class="w-full h-full object-cover object-center" />
+                            <img src="{{ bike.mainImage.image }}" class="w-full h-full object-cover object-center" />
                         </div>
                         <h3 class="text-2xl font-semibold mb-4 px-4 text-left mt-6.25">
                             {{ bike.name }}
                         </h3>
                         <p class="text-xl text-left px-4">
-                            {{ bike.desc }}
+                            {{ bike.description | slice(0, 150) }}
+                            ...
                         </p>
                         <p class="text-right pr-3">
-                            <span class="px-7.25 py-1 accentbg inline-block cursor-pointer">
+                            <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
                                 <img src="{{ asset('images/view.png') }}" class="h-6.75" />
-                            </span>
+                            </a>
                         </p>
                     </div>
                 {% endfor %}

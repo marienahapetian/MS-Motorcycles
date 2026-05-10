@@ -36,6 +36,17 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getAllByCategory(int $categoryId, int $limit = 10): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.categories', 'c')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $categoryId)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function searchLimited(string $query): array
     {
         return $this->searchQueryBuilder($query)->getResult();
