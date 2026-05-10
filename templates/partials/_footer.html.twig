@@ -1,25 +1,32 @@
 <footer class="site-footer">
     <div class="container footer-content">
-
         {# Center Section #}
         <div class="footer-center">
             <a href="{{ path('homepage') }}">
-                <img src="{{ asset('images/logo_white.png') }}" alt="M&S Logo" class="footer-logo">
-            </a>
-            <p class="copyright">
-                &copy; {{ "now"|date("Y") }} MSMotorcycles All Rights Reserved
-            </p>
-        </div>
-
-        {# Right Section - Social #}
-        <div class="footer-social">
-            <h4>Follow Us</h4>
-            <div class="social-icons">
-                <a href="#" aria-label="Facebook"><img src="{{ asset('images/facebook.png') }}" alt="Facebook Icon"></a>
-                <a href="#" aria-label="X"><img src="{{ asset('images/twitter.png') }}" alt="X Icon"></a>
-                <a href="#" aria-label="Instagram"><img src="{{ asset('images/instagram.png') }}" alt="Instagram Icon"></a>
+                <img src="{{ asset('images/logo_white.png') }}" alt="M&S Logo" class="footer-logo"></a>
+                <p class="copyright">
+                    &copy;
+                    {{ "now"|date("Y") }}
+                    MSMotorcycles Tous droits réservés
+                </p>
+            </div>
+            {# Right Section - Social #}
+            <div class="footer-social">
+                <h4>
+                    Suivez Nous
+                </h4>
+                <div class="social-icons">
+                    <a target="_blank" href="https://www.tiktok.com/@{{ settings.tiktokLink }}" aria-label="TikTok">
+                        <img src="{{ asset('images/tiktok.png') }}" alt="TikTok Icon" />
+                    </a>
+                    <a target="_blank" href="https://www.facebook.com/p/{{ settings.facebookLink }}" aria-label="Facebook">
+                        <img src="{{ asset('images/facebook.png') }}" alt="X Icon" />
+                    </a>
+                    <a target="_blank" href="https://www.instagram.com/{{ settings.instagramLink }}" aria-label="Instagram">
+                        <img src="{{ asset('images/instagram.png') }}" alt="Instagram Icon" />
+                    </a>
+                </div>
             </div>
         </div>
-
-    </div>
-</footer>
+    </footer>
+    

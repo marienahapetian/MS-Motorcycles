@@ -17,7 +17,7 @@ class SettingsType extends AbstractType
     {
         $builder
             ->add('instagram_link')
-            ->add('tweeter_link')
+            ->add('facebook_link')
             ->add('tiktok_link')
             ->add('font', ChoiceType::class, [
                 'choices' => [

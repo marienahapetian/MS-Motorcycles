@@ -19,7 +19,7 @@ class WebsiteSettings
     private ?string $instagram_link = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $tweeter_link = null;
+    private ?string $facebook_link = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tiktok_link = null;
@@ -65,14 +65,14 @@ class WebsiteSettings
         return $this;
     }
 
-    public function getTweeterLink(): ?string
+    public function getFacebookLink(): ?string
     {
-        return $this->tweeter_link;
+        return $this->facebook_link;
     }
 
-    public function setTweeterLink(?string $tweeter_link): static
+    public function setFacebookLink(?string $facebook_link): static
     {
-        $this->tweeter_link = $tweeter_link;
+        $this->facebook_link = $facebook_link;
 
         return $this;
     }
