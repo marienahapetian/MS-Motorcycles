@@ -17,16 +17,13 @@ class FeatureController extends AbstractController
 {
 
     #[Route("/dashboard/features", "dashboard_features")]
-    public function list(ManagerRegistry $doctrine): Response
+    public function list(EntityManagerInterface $em, Request $request): Response
     {
-        $features = $doctrine->getRepository(Feature::class)->findAll();
+        $features = $em->getRepository(Feature::class)->findAllFeatures($request->query->getInt('page', 1));
 
-        $currentPage = 1;
-        $totalPages = 5;
         return $this->render("dashboard/feature/list.html.twig", [
             'features' => $features,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'data' => $features
         ]);
     }
 
