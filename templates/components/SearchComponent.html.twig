@@ -1,0 +1,23 @@
+<div {{ attributes }} class="relative w-full max-w-md">
+    <input type="search" data-model="debounce(300)|query" placeholder="Rechercher des produits..." class="bg-white text-sm border rounded px-4 py-2" />
+    {% if query is not empty %}
+        <div class="absolute top-full left-0 w-full bg-white border rounded shadow mt-2 z-50">
+            {% if this.results is not empty %}
+                {% for product in this.results %}
+                    <a href="{{ path('product_show', { slug: product.slug, id: product.id }) }}" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+                        {{ product.name }}
+                    </a>
+                {% endfor %}
+                {% if this.results|length > 5 %}
+                    <a href="{{ path('search_results', { q: query }) }}" class="block px-4 py-3 text-sm font-semibold border-t text-black hover:bg-gray-50">
+                        View all results
+                    </a>
+                {% endif %}
+            {% elseif query|length > 3 %}
+                <div class="px-4 py-3 text-gray-500">
+                    No products found
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

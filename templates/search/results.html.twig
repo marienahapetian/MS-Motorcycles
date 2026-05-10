@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+{% block header %}
+    <section class="header">
+        {% include 'partials/_header.html.twig' %}
+        <div class="relative banner h-30 -mt-30">
+            <img src="{{ asset('images/1907896.jpg') }}" alt="Bike" class="brightness-50 w-full h-full object-cover object-center" />
+        </div>
+    </section>
+{% endblock %}
+{% block content %}
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <h1 class="text-3xl mb-10">
+            Search Results for:
+            {{ query }}
+        </h1>
+        <div class="flex flex-col gap-5">
+            {% for product in products %}
+                <div class="grid grid-cols-5 gap-3 shadow-sm p-2.5">
+                    <div class="h-30 w-50">
+                        <img src="{{ product.mainImage?product.mainImage.image: " /images/noimage.jpg" }}" class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition" />
+                    </div>
+                    <div class="col-span-4 flex flex-col">
+                        <h4 class="text-xl accentcolor">
+                            {{ product.name }}
+                        </h4>
+                        <h5 class="text-sm text-gray-400 mb-2.5">
+                            {{ product.brand.name }}
+                        </h5>
+                        <p class="blackcolor">
+                            {{ product.description|length > 300
+                            ? product.description|slice(0, 300) ~ '...'
+                            : product.description }}
+                        </p>
+                        <a href="{{ path('product_show', {slug: product.slug, id:product.id}) }}" class="self-end accentbg text-white px-2.5 py-1 inline-block mt-2.5 rounded">
+                            View More
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            {% include "partials/_pagination.html.twig" %}
+        </div>
+    </div>
+{% endblock %}

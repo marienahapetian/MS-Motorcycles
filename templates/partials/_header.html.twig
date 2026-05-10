@@ -33,13 +33,14 @@
                     </ul>
                 </nav>
                 {# Right Icons #}
-                <div class="header-icons">
-                    <a href="{{ path('search') }}" class="icon search">
-                        <img src="{{ asset('images/magnifying-glass.png') }}" alt="Search Icon" />
-                    </a>
+                <div class="header-icons flex items-center relative" data-controller="search-toggle" data-action="click@window->search-toggle#close">
+                    <img src="{{ asset('images/search.png') }}" class="block cursor-pointer" alt="Search Icon" data-action="click->search-toggle#toggle" />
+                    <div data-search-toggle-target="box" class="hidden absolute top-full right-0 mt-2">
+                        <twig:SearchComponent/>
+                    </div>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <a href="{{ path('dashboard_home') }}" class="icon user">
-                            <img src="{{ asset('images/user.png') }}" alt="User Account Icon" />
+                            <img src="{{ asset('images/user.png') }}" class="block" alt="User Account Icon" />
                         </a>
                     {% endif %}
                 </div>

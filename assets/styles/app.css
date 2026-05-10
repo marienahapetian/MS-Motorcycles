@@ -108,11 +108,12 @@ img {
 }
 
 .header-icons a {
-    color: #fff;
-    font-size: 18px;
+    /* color: #fff; */
+    /* font-size: 18px; */
 }
-.header-icons a img {
+.header-icons img {
     height: 20px;
+    display: block;
 }
 
 .site-footer {

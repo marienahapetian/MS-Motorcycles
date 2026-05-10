@@ -26,6 +26,45 @@ class ProductRepository extends ServiceEntityRepository
         return $this->paginator->paginate($query, $page, $perpage);
     }
 
+    public function searchByName(string $query): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function searchLimited(string $query): array
+    {
+        return $this->searchQueryBuilder($query)->getResult();
+    }
+
+    public function searchQueryBuilder(string $query)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb
+            ->leftJoin('p.brand', 'b')
+            ->leftJoin('p.categories', 'c')
+
+            ->andWhere(
+                $qb->expr()->orX(
+                    'LOWER(p.name) LIKE LOWER(:query)',
+                    'LOWER(p.description) LIKE LOWER(:query)',
+                    'LOWER(b.name) LIKE LOWER(:query)',
+                    'LOWER(c.name) LIKE LOWER(:query)'
+                )
+            )
+
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults(6)
+            ->distinct();
+
+        return $qb->getQuery();
+    }
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
