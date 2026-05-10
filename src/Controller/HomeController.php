@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Entity\WebsiteSettings;
 use App\Form\MessageFormType;
 use App\Repository\ProductRepository;
+use App\Repository\WebsiteSettingsRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function index(Request $request, EntityManagerInterface $entityManager, ProductRepository $pr): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, ProductRepository $pr, WebsiteSettingsRepository $sr): Response
     {
         $services = [
             ["title" => 'Repair', "text" => "Your Bike is having a trouble? MsMotorcycles team includes professionals that will resolve your issues within a matter of days!", "icon" => 'repair'],
@@ -24,6 +26,8 @@ class HomeController extends AbstractController
 
         ];
         $bikes = $pr->getAllByCategory(1, 3); //catId 1, limit 3
+
+        $setting = $sr->find(1);
 
         $message = new Message();
         $contactForm = $this->createForm(MessageFormType::class, $message);
@@ -43,7 +47,8 @@ class HomeController extends AbstractController
             'page_title' => 'Home',
             'services' => $services,
             'bikes' => $bikes,
-            'contactForm' => $contactForm
+            'contactForm' => $contactForm,
+            'settings' => $setting
         ]);
     }
 }
