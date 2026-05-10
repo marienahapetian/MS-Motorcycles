@@ -2,11 +2,8 @@
 @source not "../../public";
 
 :root {
-    --accent: #DB362C;
     --orange: #FF9F18;
     --accentdark: #751D18;
-    --black: #1F1F1F;
-    --white: #ffffff;
     --grey: #323232;
     --middlegrey: #8b8b8b;
     --bluegrey: #2B2A36;
@@ -16,7 +13,7 @@
 
 body {
     background-color: var(--white);
-    font-family: 'Jeju Hallasan', cursive;;
+    font-family: var(--site-font);
 }
 img {
     max-width: 100%;

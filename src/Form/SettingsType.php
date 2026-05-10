@@ -21,10 +21,11 @@ class SettingsType extends AbstractType
             ->add('tiktok_link')
             ->add('font', ChoiceType::class, [
                 'choices' => [
-                    'Arial' => 'arial',
-                    'Roboto' => 'roboto',
-                    'Open Sans' => 'open_sans',
-                    'Montserrat' => 'montserrat',
+                    'Arial' => 'Arial, sans-serif',
+                    'Roboto' => "'Roboto', sans-serif",
+                    'Open Sans' => "'Open Sans', sans-serif",
+                    'Montserrat' => "'Montserrat', sans-serif",
+                    'Bricolage Grotesque' => "'Bricolage Grotesque', sans-serif"
                 ],
             ])
             ->add('accent_color', ColorType::class)
