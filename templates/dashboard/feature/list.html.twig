@@ -45,11 +45,11 @@
                                 </td> #}
                                 <td class="px-3 py-2 space-x-2 flex">
                                     <a href="{{ path('feature_edit', {id: feature.id}) }}" class="text-blue-600 hover:underline">
-                                        Edit
+                                        <img src="{{ asset('images/edit.png') }}" alt='Icon modifier' />
                                     </a>
                                     <form method="POST" action="{{ path('feature_delete', {id:feature.id}) }}">
                                         <button type="submit" href="{{ path('feature_delete', {id:feature.id}) }}" class="text-red-600 cursor-pointer hover:underline" onclick="return confirm('Vous etes sure?')" title="delete" class="cursor-pointer">
-                                            Supprimer
+                                            <img src="{{ asset('images/bin.png') }}" alt='Icon supprimer' />
                                         </button>
                                     </form>
                                 </td>
