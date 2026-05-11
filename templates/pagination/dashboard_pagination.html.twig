@@ -13,7 +13,7 @@
         {% endfor %}
     </div>
     <p class="text-gray-500 text-sm">
-        Affichage des articles
+        Resultats
         {{ firstItemNumber }}
         à
         {{ lastItemNumber }}
@@ -22,7 +22,9 @@
     </p>
 {% else %}
     <p>
-        Resultats 1 -
+        Resultats
+        {{ firstItemNumber }}
+        à
         {{ currentItemCount }}
         sur
         {{ totalCount }}

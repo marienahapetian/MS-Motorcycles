@@ -21,7 +21,7 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findAllProducts(int $page, int $perpage = 15)
     {
-        $query = $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')->orderBy('p.id', 'DESC')
             ->getQuery();
         return $this->paginator->paginate($query, $page, $perpage);
     }
@@ -32,6 +32,7 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('p.name LIKE :query')
             ->setParameter('query', '%' . $query . '%')
             ->setMaxResults(10)
+            ->orderBy('p.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -43,6 +44,7 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('c.id = :id')
             ->setParameter('id', $categoryId)
             ->setMaxResults($limit)
+            ->orderBy('p.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

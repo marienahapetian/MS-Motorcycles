@@ -22,7 +22,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function findAllMessages(int $page)
     {
-        $query = $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')->orderBy('p.id', 'DESC')
             ->getQuery();
         return $this->paginator->paginate($query, $page);
     }
