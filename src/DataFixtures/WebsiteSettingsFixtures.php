@@ -12,10 +12,10 @@ class WebsiteSettingsFixtures extends Fixture
     {
         $settings = new WebsiteSettings();
 
-        $settings->setFont('montserrat');
-        $settings->setInstagramLink('msmotorcycles');
-        $settings->setTweeterLink('msmotorcycles'); // typo in entity but OK
-        $settings->setTiktokLink('msmotorcycles');
+        $settings->setFont('\'Montserrat\', sans-serif');
+        $settings->setInstagramLink('msmotorcycles64');
+        $settings->setFacebookLink('Ms-Motorcycles-64-61565209926614'); // typo in entity but OK
+        $settings->setTiktokLink('ms.motorcycles.64');
 
         $settings->setAccentColor('#DB362C');
         $settings->setBlackColor('#323232');
