@@ -4,6 +4,7 @@ twig:
     globals:
         ga_tracking: "UA-xxxxx-x"
         hasSidebar: false
+        appGlobal: '@App\Twig\AppGlobal'
 
 when@test:
     twig:

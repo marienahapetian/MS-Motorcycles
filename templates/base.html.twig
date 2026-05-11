@@ -12,16 +12,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Jua&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
-        {% if settings.font == "'Montserrat', sans-serif" %}
+        {% if appGlobal.settings.font == "'Montserrat', sans-serif" %}
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
         {% endif %}
 
         <style>
             :root {
-                --site-font:{{ settings.font|raw }};
-                --accent: {{ settings.accentColor }};
-                --black: {{ settings.blackColor }};
-                --white: {{ settings.whiteColor }};
+                --site-font:{{ appGlobal.settings.font|raw }};
+
+                --accent:{{ appGlobal.settings.accentColor }};
+
+                --black:{{ appGlobal.settings.blackColor }};
+
+                --white:{{ appGlobal.settings.whiteColor }};
             }
         </style>
 
@@ -42,7 +45,6 @@
 
     </head>
     <body class="min-h-screen {{ app.request.attributes.get('_route') }}">
-
         {% block body %}
             {% block header %}
                 {% include 'partials/_header.html.twig' %}

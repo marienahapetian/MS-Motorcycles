@@ -28,7 +28,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/edit/{id}', name: 'product_edit')]
+    #[Route('/dashboard/product/edit/{id}', name: 'product_edit')]
     public function edit(EntityManager $entityManager, Request $request, Product $product, SluggerInterface $slugger, ImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -63,7 +63,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/add', name: 'product_add')]
+    #[Route('/dashboard/product/add', name: 'product_add')]
     public function add(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -94,7 +94,7 @@ class ProductController extends AbstractController
         return $this->render("dashboard/product/add.html.twig", ['form' => $form]);
     }
 
-    #[Route('/product/{id}/delete', name: 'product_delete')]
+    #[Route('/dashboard/product/{id}/delete', name: 'product_delete')]
     public function delete(Product $product, ManagerRegistry $doctrine)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

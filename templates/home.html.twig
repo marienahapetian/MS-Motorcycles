@@ -107,17 +107,17 @@
             Notre emplacement
         </h2>
         <div class="max-w-6xl mx-auto px-4 flex flex-col gap-6.25">
-            {{ settings.location | raw }}
+            {{ appGlobal.settings.location | raw }}
             <div class="flex items-center gap-5.5">
                 <img src="{{ asset('/images/location.png') }}" class="h-10 w-10" />
                 <span class="text-3xl font-semibold">
-                    {{ settings.address }}
+                    {{ appGlobal.settings.address }}
                 </span>
             </div>
             <div class="flex items-center gap-5.5">
                 <img src="{{ asset('/images/phone.png') }}" class="h-10 w-10" />
                 <span class="text-3xl font-semibold">
-                    {{ settings.phone|split('')|batch(2)|map(v => v|join(''))|join(' ') }}
+                    {{ appGlobal.settings.phone|split('')|batch(2)|map(v => v|join(''))|join(' ') }}
                 </span>
             </div>
         </div>

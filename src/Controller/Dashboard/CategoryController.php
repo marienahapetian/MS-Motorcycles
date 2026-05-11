@@ -34,9 +34,12 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('icon')->getData();
-            $newFilename = $imageUploader->upload($file, $slugger);
+            if ($file) {
+                $newFilename = $imageUploader->upload($file, $slugger);
 
-            $category->setIcon('/images/uploads/' . $newFilename);
+                $category->setIcon('/images/uploads/' . $newFilename);
+            }
+
 
             $entityManager->persist($category);
             $entityManager->flush();

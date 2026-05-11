@@ -2,15 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Message;
-use App\Entity\WebsiteSettings;
-use App\Form\MessageFormType;
 use App\Repository\ProductRepository;
 use App\Repository\WebsiteSettingsRepository;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,8 +12,7 @@ class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
     public function index(
-        ProductRepository $pr,
-        WebsiteSettingsRepository $sr
+        ProductRepository $pr
     ): Response {
 
         $services = [
@@ -42,13 +35,10 @@ class HomeController extends AbstractController
 
         $bikes = $pr->getAllByCategory(1, 3);
 
-        $setting = $sr->find(1);
-
         return $this->render('home.html.twig', [
             'page_title' => 'Home',
             'services' => $services,
             'bikes' => $bikes,
-            'settings' => $setting
         ]);
     }
 }
