@@ -10,7 +10,9 @@
     --lightgrey: #EDEEF3;
     --purplegrey: #4D587C;
 }
-
+html {
+    scroll-behavior: smooth;
+}
 body {
     background-color: var(--white);
     font-family: var(--site-font);
@@ -284,4 +286,13 @@ section h3{
 
 select option:checked{
     font-weight: bold;
+}
+.alert {
+    transition: opacity 0.5s ease;
+    background: var(--white);
+    color: green;
+}
+
+.fade-out {
+    opacity: 0;
 }
