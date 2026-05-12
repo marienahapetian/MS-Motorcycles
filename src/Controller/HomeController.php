@@ -17,18 +17,18 @@ class HomeController extends AbstractController
 
         $services = [
             [
-                "title" => 'Repair',
-                "text" => "Your Bike is having a trouble? MsMotorcycles team includes professionals that will resolve your issues within a matter of days!",
+                "title" => 'Réparation',
+                "text" => "Votre moto a un problème ? L’équipe de MsMotorcycles comprend des professionnels qui résoudront vos soucis en seulement quelques jours !",
                 "icon" => 'repair'
             ],
             [
-                "title" => 'Sell',
-                "text" => "MsMotorcycles sells everything and anything a Real Biker might need! Bikes, clothing, accessories, oils... We got you covered",
+                "title" => 'Vente',
+                "text" => "MsMotorcycles vend tout ce dont un vrai motard peut avoir besoin ! Motos, vêtements, accessoires, huiles… Nous avons tout ce qu’il vous faut!",
                 "icon" => 'cart'
             ],
             [
-                "title" => 'Offers',
-                "text" => "Apart from having the best prices on the market, we occasionally offer Friends&Family discounts to our customers!",
+                "title" => 'Offres',
+                "text" => "En plus de proposer les meilleurs prix du marché, nous offrons occasionnellement des réductions Friends & Family à nos clients !",
                 "icon" => 'offers'
             ],
         ];
