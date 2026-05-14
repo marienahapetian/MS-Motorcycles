@@ -68,10 +68,11 @@ class Product
     )]
     private Collection $images;
 
-    #[ORM\ManyToMany(
+    #[ORM\OneToMany(
         mappedBy: 'product',
         targetEntity: ProductFeature::class,
-        cascade: ['persist', 'remove']
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
     )]
     private Collection $features;
 
@@ -262,5 +263,17 @@ class Product
         }
 
         return $this;
+    }
+
+    public function getFeatureValue(Feature $feature): ?string
+    {
+        foreach ($this->features as $productFeature) {
+
+            if ($productFeature->getFeature()?->getId() === $feature->getId()) {
+                return $productFeature->getValue();
+            }
+        }
+
+        return null;
     }
 }

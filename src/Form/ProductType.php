@@ -35,6 +35,7 @@ class ProductType extends AbstractType
                 'by_reference' => false,
                 'expanded' => false,
                 'required' => true,
+                'empty_data' => null,
             ])
             ->add('brand', EntityType::class, [
                 'class' => Brand::class,

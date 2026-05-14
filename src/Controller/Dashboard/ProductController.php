@@ -3,8 +3,12 @@
 namespace App\Controller\Dashboard;
 
 use App\Entity\Product;
+use App\Entity\ProductFeature;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
+use App\Repository\CategoryRepository;
+use App\Repository\FeatureRepository;
+use App\Repository\ProductRepository;
 use App\Services\ImageUploader;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,14 +33,24 @@ class ProductController extends AbstractController
     }
 
     #[Route('/dashboard/product/edit/{id}', name: 'product_edit')]
-    public function edit(EntityManager $entityManager, Request $request, Product $product, SluggerInterface $slugger, ImageUploader $imageUploader): Response
+    public function edit(Product $product, EntityManager $entityManager, Request $request, FeatureRepository $featureRepository, SluggerInterface $slugger, ImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
+        // available features for product's type
+        $availableFeatures = [];
+
+        foreach ($product->getCategories() as $category) {
+            foreach ($category->getFeatures() as $feature) {
+                $availableFeatures[$feature->getId()] = $feature;
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            // upload images, gallery
             $files = $form->get('images')->getData();
             foreach ($files as $index => $file) {
 
@@ -49,6 +63,40 @@ class ProductController extends AbstractController
 
                 $product->addImage($image);
             }
+
+            //update features
+            $featuresData = $request->request->all('features');
+            foreach ($featuresData as $featureId => $value) {
+
+                if (!$value) {
+                    continue;
+                }
+
+                $feature = $featureRepository->find($featureId);
+
+                // find existing ProductFeature
+                $productFeature = null;
+
+                foreach ($product->getFeatures() as $existing) {
+
+                    if ($existing->getFeature()->getId() == $featureId) {
+                        $productFeature = $existing;
+                        break;
+                    }
+                }
+
+                if (!$productFeature) {
+                    $productFeature = new ProductFeature();
+                    $productFeature->setProduct($product);
+                    $productFeature->setFeature($feature);
+
+                    $product->getFeatures()->add($productFeature);
+                }
+
+                $productFeature->setValue($value);
+
+                $entityManager->persist($productFeature);
+            }
             $product->setModified(new DateTime());
             $entityManager->persist($product);
             $entityManager->flush();
@@ -59,7 +107,8 @@ class ProductController extends AbstractController
         }
         return $this->render("dashboard/product/edit.html.twig", [
             "product" => $product,
-            "form" => $form
+            "form" => $form,
+            "availableFeatures" => $availableFeatures,
         ]);
     }
 
@@ -91,7 +140,10 @@ class ProductController extends AbstractController
 
             return $this->redirectToRoute('dashboard_products');
         }
-        return $this->render("dashboard/product/add.html.twig", ['form' => $form]);
+        return $this->render("dashboard/product/add.html.twig", [
+            'form' => $form,
+            "availableFeatures" => [],
+        ]);
     }
 
     #[Route('/dashboard/product/{id}/delete', name: 'product_delete')]
@@ -138,5 +190,46 @@ class ProductController extends AbstractController
         $this->addFlash('success', 'Image Principale Changé!');
 
         return $this->redirectToRoute('dashboard_products');
+    }
+
+    #[Route('/dashboard/products/features', name: 'dashboard_product_features')]
+    public function featuresByCategory(
+        Request $request,
+        CategoryRepository $categoryRepository,
+        ProductRepository $productRepository
+    ): Response {
+
+        $categoryIds = $request->query->all('categories');
+
+        $productId = $request->query->get('product');
+
+        $product = null;
+
+        if ($productId) {
+            $product = $productRepository->find($productId);
+        }
+
+        $features = [];
+
+        foreach ($categoryIds as $categoryId) {
+
+            $category = $categoryRepository->find($categoryId);
+
+            if (!$category) {
+                continue;
+            }
+
+            foreach ($category->getFeatures() as $feature) {
+                $features[$feature->getId()] = $feature;
+            }
+        }
+
+        return $this->render(
+            'dashboard/product/_features.html.twig',
+            [
+                'features' => $features,
+                'product' => $product,
+            ]
+        );
     }
 }

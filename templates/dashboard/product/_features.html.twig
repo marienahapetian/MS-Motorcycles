@@ -1,0 +1,31 @@
+<div class="mb-6">
+    <h2 class="text-lg font-semibold mb-4">
+        Caractéristiques
+    </h2>
+    <div class="space-y-3">
+        {% for feature in features %}
+            <div class="grid md:grid-cols-4 gap-2 items-center">
+                <label class="bg-gray-100 px-3 py-2">
+                    {{ feature.name }}
+                </label>
+                <div class="col-span-3">
+                    {% if feature.type == 'free' %}
+                        <input
+                    type="text" name="features[{{ feature.id }}]" value="{{ product ? product.getFeatureValue(feature) : '' }}" class="w-full border bg-white px-3 py-2" />
+                        {% elseif feature.type == 'options' %}
+                        <select name="features[{{ feature.id }}]" class="w-full border bg-white px-3 py-2">
+                            <option value="">
+                                -- Choisir --
+                            </option>
+                            {% for option in feature.options %}
+                                <option value="{{ option.value }}" {% if product and product.getFeatureValue(feature) == option.value %} selected {% endif %}>
+                                    {{ option.value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
