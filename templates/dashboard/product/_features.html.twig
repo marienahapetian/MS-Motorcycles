@@ -3,29 +3,38 @@
         Caractéristiques
     </h2>
     <div class="space-y-3">
-        {% for feature in features %}
-            <div class="grid md:grid-cols-4 gap-2 items-center">
-                <label class="bg-gray-100 px-3 py-2">
-                    {{ feature.name }}
-                </label>
-                <div class="col-span-3">
-                    {% if feature.type == 'free' %}
-                        <input
-                    type="text" name="features[{{ feature.id }}]" value="{{ product ? product.getFeatureValue(feature) : '' }}" class="w-full border bg-white px-3 py-2" />
-                        {% elseif feature.type == 'options' %}
-                        <select name="features[{{ feature.id }}]" class="w-full border bg-white px-3 py-2">
-                            <option value="">
-                                -- Choisir --
-                            </option>
-                            {% for option in feature.options %}
-                                <option value="{{ option.value }}" {% if product and product.getFeatureValue(feature) == option.value %} selected {% endif %}>
-                                    {{ option.value }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    {% endif %}
-                </div>
+        {% if features is empty %}
+            <div class="bg-gray-100 text-gray-500 px-4 py-3 border border-dashed">
+                Sélectionnez d'abord une catégorie pour afficher les caractéristiques disponibles.
+                <span class="text-xs block">
+                    Si vous avez déjà sélectionné une catégorie et que cette section est toujours vide, cela signifie que la catégorie sélectionnée ne possède aucune caractéristique disponible.
+                </span>
             </div>
-        {% endfor %}
+        {% else %}
+            {% for feature in features %}
+                <div class="grid md:grid-cols-4 gap-2 items-center">
+                    <label class="bg-gray-100 px-3 py-2">
+                        {{ feature.name }}
+                    </label>
+                    <div class="col-span-3">
+                        {% if feature.type == 'free' %}
+                            <input
+                        type="text" name="features[{{ feature.id }}]" value="{{ product ? product.getFeatureValue(feature) : '' }}" class="w-full border bg-white px-3 py-2" />
+                            {% elseif feature.type == 'options' %}
+                            <select name="features[{{ feature.id }}]" class="w-full border bg-white px-3 py-2">
+                                <option value="">
+                                    -- Choisir --
+                                </option>
+                                {% for option in feature.options %}
+                                    <option value="{{ option.value }}" {% if product and product.getFeatureValue(feature) == option.value %} selected {% endif %}>
+                                        {{ option.value }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
