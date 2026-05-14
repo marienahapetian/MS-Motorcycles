@@ -7,7 +7,7 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['container']
+    static targets = ['featuresContainer', 'brandContainer']
 
     
 
@@ -33,13 +33,19 @@ export default class extends Controller {
             params.append('product', productId);
         }
 
-        const response = await fetch(
+        const featuresResponse = await fetch(
             `/dashboard/products/features?${params.toString()}`
+         );
+         
+        const brandsResponse = await fetch(
+            `/dashboard/products/brands?${params.toString()}`
         );
 
-        const html = await response.text();
+        const featuresHtml = await featuresResponse.text();
+        const brandsHtml = await brandsResponse.text();
 
-        this.containerTarget.innerHTML = html;
+        this.featuresContainerTarget.innerHTML = featuresHtml;
+        this.brandContainerTarget.innerHTML = brandsHtml;
     }
 
 }

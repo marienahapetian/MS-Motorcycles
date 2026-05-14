@@ -142,7 +142,6 @@ class ProductController extends AbstractController
         }
         return $this->render("dashboard/product/add.html.twig", [
             'form' => $form,
-            "availableFeatures" => [],
         ]);
     }
 
@@ -225,10 +224,54 @@ class ProductController extends AbstractController
         }
 
         return $this->render(
-            'dashboard/product/_features.html.twig',
+            'dashboard/partials/product/_features.html.twig',
             [
                 'features' => $features,
                 'product' => $product,
+            ]
+        );
+    }
+
+    #[Route('/dashboard/products/brands', name: 'dashboard_product_brands')]
+    public function brandsByCategory(
+        Request $request,
+        CategoryRepository $categoryRepository,
+        ProductRepository $productRepository
+    ): Response {
+
+        $categoryIds = $request->query->all('categories');
+
+        $productId = $request->query->get('product');
+
+        $product = null;
+
+        if ($productId) {
+            $product = $productRepository->find($productId);
+        }
+
+        $form = $this->createForm(ProductType::class, $product);
+
+        $brands = [];
+
+        foreach ($categoryIds as $categoryId) {
+
+            $category = $categoryRepository->find($categoryId);
+
+            if (!$category) {
+                continue;
+            }
+
+            foreach ($category->getBrands() as $brand) {
+                $brands[$brand->getId()] = $brand;
+            }
+        }
+
+        return $this->render(
+            'dashboard/partials/product/_brand.html.twig',
+            [
+                'brands' => $brands,
+                'product' => $product,
+                'form' => $form->createView(),
             ]
         );
     }
