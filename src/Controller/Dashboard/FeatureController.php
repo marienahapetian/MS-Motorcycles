@@ -4,6 +4,7 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Category;
 use App\Entity\Feature;
+use App\Entity\FeatureValue;
 use App\Form\FeatureType;
 use Doctrine\Migrations\Configuration\EntityManager\ManagerRegistryEntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,18 +29,16 @@ class FeatureController extends AbstractController
     }
 
     #[Route("/dashboard/feature/edit/{id}", "feature_edit")]
-    public function edit(Request $request, Feature $feature, ManagerRegistry $doctrine): Response
+    public function edit(Request $request, Feature $feature, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(FeatureType::class, $feature);
         $form->handleRequest($request);
 
-        $entityManager = $doctrine->getManager();
-
-        $categories = $doctrine->getRepository(Category::class)->findAll();
+        $categories = $em->getRepository(Category::class)->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($feature);
-            $entityManager->flush();
+            $em->persist($feature);
+            $em->flush();
 
             return $this->redirectToRoute('dashboard_features');
         }

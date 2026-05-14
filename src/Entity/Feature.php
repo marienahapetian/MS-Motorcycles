@@ -26,6 +26,18 @@ class Feature
     )]
     private ?string $name = null;
 
+    #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['free', 'options'])]
+    private ?string $type = null;
+
+    #[ORM\OneToMany(
+        mappedBy: 'feature',
+        targetEntity: FeatureValue::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $options;
+
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'features')]
     #[ORM\JoinTable(name: 'feature_category')]
     private Collection $categories;
@@ -33,6 +45,7 @@ class Feature
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,6 +62,17 @@ class Feature
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
         return $this;
     }
 
@@ -69,6 +93,36 @@ class Feature
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FeatureValue>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(FeatureValue $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+            $option->setFeature($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(FeatureValue $option): static
+    {
+        if ($this->options->removeElement($option)) {
+            // set the owning side to null (unless already changed)
+            if ($option->getFeature() === $this) {
+                $option->setFeature(null);
+            }
+        }
+
         return $this;
     }
 }

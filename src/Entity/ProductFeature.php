@@ -15,12 +15,13 @@ class ProductFeature
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'features')]
+    #[ORM\ManyToOne(inversedBy: 'features')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $feature_id = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Feature $feature = null;
 
     #[ORM\Column(length: 255)]
     private ?string $value = null;
@@ -42,14 +43,14 @@ class ProductFeature
         return $this;
     }
 
-    public function getFeatureId(): ?string
+    public function getFeature(): ?Feature
     {
-        return $this->feature_id;
+        return $this->feature;
     }
 
-    public function setFeatureId(string $feature_id): static
+    public function setFeature(Feature $feature): static
     {
-        $this->feature_id = $feature_id;
+        $this->feature = $feature;
 
         return $this;
     }
