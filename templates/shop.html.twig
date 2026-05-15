@@ -21,8 +21,21 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for product in products %}
                 <div class="bg-white shadow-md rounded-sm overflow-hidden">
-                    <div class="w-full h-48 overflow-hidden">
-                        <img src="{{ product.mainImage?product.mainImage.image: '/images/noimage.jpg' }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
+                    <div class="relative w-full h-48 overflow-hidden group product-image">
+                        {% set hoverImage = product.galleryImages is not empty ? product.galleryImages[0].image : null %}
+                        <img src="{{ product.mainImage ? product.mainImage.image : '/images/noimage.jpg' }}" alt="{{ product.name }}" class="
+                            absolute inset-0 w-full h-full object-cover
+                            {% if hoverImage %}
+                            transition-opacity duration-300 group-hover:opacity-0
+                            {% endif %}
+                        " />
+                        {% if hoverImage %}
+                            <img src="{{ hoverImage }}" alt="{{ product.name }}" class="
+                            absolute inset-0 w-full h-full object-cover
+                            opacity-0 transition-opacity duration-300
+                            group-hover:opacity-100
+                        " />
+                        {% endif %}
                     </div>
                     <div class="flex items-center justify-between px-4 py-3 bg-white">
                         <span class="font-semibold text-gray-800">
