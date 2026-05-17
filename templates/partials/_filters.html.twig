@@ -16,7 +16,7 @@
     </div>
     <div class="mb-6">
         <h3 class="text-red-700 font-semibold mb-3">
-            Price
+            Prix
         </h3>
         <div class="space-y-2">
             {% for price in prices %}
@@ -31,14 +31,14 @@
     </div>
     <div>
         <h3 class="text-red-700 font-semibold mb-3">
-            Color
+            Couleur
         </h3>
         <div class="flex space-x-3">
             {% for color in colors %}
                 <label class="relative cursor-pointer">
-                    <input type="checkbox" name="colors[]" value="{{ color.name }}" class="sr-only peer" />
+                    <input type="checkbox" name="colors[]" value="{{ color.value }}" class="sr-only peer" />
                     <div class="w-6 h-6 rounded border border-gray-300
-                    peer-checked:ring-2 peer-checked:ring-offset-1" style="background-color: {{ color.hex }}"></div>
+                    peer-checked:ring-2 peer-checked:ring-offset-1" style="background-color: {{ color.value | trans }}"></div>
                 </label>
             {% endfor %}
         </div>

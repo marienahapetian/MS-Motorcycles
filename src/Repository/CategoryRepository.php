@@ -21,9 +21,21 @@ class CategoryRepository extends ServiceEntityRepository
 
     public function findAllCategories(int $page)
     {
-        $query = $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('c')
             ->getQuery();
         return $this->paginator->paginate($query, $page);
+    }
+
+    public function getCategoriesFromProducts(iterable $products): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb->join('c.products', 'p')
+            ->andWhere('p IN (:products)')
+            ->setParameter('products', $products)
+            ->distinct();
+
+        return $qb->getQuery()->getResult();
     }
 
     //    /**
