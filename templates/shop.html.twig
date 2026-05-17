@@ -23,7 +23,7 @@
                 <div class="bg-white shadow-md rounded-sm overflow-hidden">
                     <a href="{{ path('product_show', {id: product.id, slug: product.slug}) }}">
                         <div class="relative w-full h-48 overflow-hidden group product-image">
-                            {% set hoverImage = product.galleryImages is not empty ? product.galleryImages[0].image : null %}
+                            {% set hoverImage = product.galleryImages is not empty ? product.galleryImages.first.image : null %}
                             <img src="{{ product.mainImage ? product.mainImage.image : '/images/noimage.jpg' }}" alt="{{ product.name }}" class="
                                 absolute inset-0 w-full h-full object-cover
                                 {% if hoverImage %}
