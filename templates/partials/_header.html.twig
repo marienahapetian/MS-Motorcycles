@@ -1,50 +1,79 @@
-{# templates/partials/_header.html.twig #}
-<header class="site-header">
+<header class="site-header relative z-50 px-5" data-controller="mobile-menu">
     <div class="header-overlay">
-        <div class="container header-content">
+        <div class="container header-content flex items-center justify-between py-4">
             {# Logo #}
             <div class="logo">
                 <a href="{{ path('homepage') }}">
-                    <img src="{{ asset('images/logo_white.png') }}" alt="M&S Logo"></a>
-                </div>
-                {# Navigation #}
-                <nav class="main-nav">
-                    <ul>
-                        <li>
-                            <a href="{{ path('homepage') }}">
-                                Accueil
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path('shop') }}">
-                                Shop
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path('homepage') }}#about">
-                                À propos
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path('homepage') }}#contact">
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                {# Right Icons #}
-                <div class="header-icons flex items-center relative" data-controller="search-toggle" data-action="click@window->search-toggle#close">
-                    <img src="{{ asset('images/search.png') }}" class="block cursor-pointer" alt="Search Icon" data-action="click->search-toggle#toggle" />
-                    <div data-search-toggle-target="box" class="hidden absolute top-full right-0 mt-2">
-                        <twig:SearchComponent/>
-                    </div>
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('dashboard_home') }}" class="icon user">
-                            <img src="{{ asset('images/user.png') }}" class="block" alt="User Account Icon" />
-                        </a>
-                    {% endif %}
-                </div>
+                    <img src="{{ asset('images/logo_white.png') }}" alt="M&S Logo" class="h-10 w-auto" />
+                </a>
             </div>
+            {# Desktop Navigation #}
+            <nav class="main-nav hidden md:flex items-center gap-8">
+                <ul class="flex items-center gap-8 text-white">
+                    <li>
+                        <a href="{{ path('homepage') }}">
+                            Accueil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('shop') }}">
+                            Shop
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('homepage') }}#about">
+                            À propos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('homepage') }}#contact">
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {# Right Icons Desktop #}
+            <div class="header-icons hidden md:flex items-center relative gap-4" data-controller="search-toggle" data-action="click@window->search-toggle#close">
+                <img src="{{ asset('images/search.png') }}" class="block cursor-pointer" alt="Search Icon" data-action="click->search-toggle#toggle" />
+                <div data-search-toggle-target="box" class="hidden absolute top-full right-0 mt-2">
+                    <twig:SearchComponent/>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="{{ path('dashboard_home') }}" class="hidden md:block">
+                        <img src="{{ asset('images/user.png') }}" class="block" alt="User Account Icon" />
+                    </a>
+                {% endif %}
+            </div>
+            {# Burger Button - Mobile Only #}
+            <button class="md:hidden flex flex-col gap-1 z-50 cursor-pointer" data-action="click->mobile-menu#toggle">
+                <span class="w-6 h-0.5 bg-white"></span>
+                <span class="w-6 h-0.5 bg-white"></span>
+                <span class="w-6 h-0.5 bg-white"></span>
+            </button>
         </div>
-    </header>
-    
+    </div>
+    {# Mobile Fullscreen Menu #}
+    <div data-mobile-menu-target="menu" class="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8  bg-black text-white text-2xl
+        opacity-0 invisible -translate-y-full transition-all duration-500 ease-in-out md:hidden">
+        <a href="{{ path('homepage') }}">
+            Accueil
+        </a>
+        <a href="{{ path('shop') }}">
+            Shop
+        </a>
+        <a href="{{ path('homepage') }}#about">
+            À propos
+        </a>
+        <a href="{{ path('homepage') }}#contact">
+            Contact
+        </a>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a href="{{ path('dashboard_home') }}">
+                Tableau de Bord
+            </a>
+        {% endif %}
+        <div data-search-toggle-target="box" class="top-full right-0 mt-2">
+            <twig:SearchComponent/>
+        </div>
+    </div>
+</header>

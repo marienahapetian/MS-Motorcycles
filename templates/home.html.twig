@@ -40,8 +40,8 @@
             you are welcomed!
         </p>
     </section>
-    <section id="services" class="dark-bg text-center p-15">
-        <img src="{{ asset('images/customer-support.png') }}" class="h-22.5" alt="M&S Moto Services" />
+    <section id="services" class="dark-bg text-center px-3 py-10 md:p-15">
+        <img src="{{ asset('images/customer-support.png') }}" class="h-15 md:h-22.5" alt="M&S Moto Services" />
         <h3 class="mt-2.5">
             Ce que nous proposons
         </h3>
@@ -49,11 +49,11 @@
             Nos Services
         </h2>
         <div class="max-w-6xl mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-13.75">
+            <div class="grid md:grid-cols-3 gap-5 md:gap-13.75">
                 {% for service in services %}
-                    <div class="card text-center px-6.25 h-90 relative">
+                    <div class="card text-center px-6.25 h-80 md:h-90 relative">
                         <div class="icon-cont size-fit mx-auto mb-6 px-10.75 py-5.75  flex items-center justify-center">
-                            <img src="{{ asset('images/' ~ service.icon ~ '.png') }}" class="h-16" />
+                            <img src="{{ asset('images/' ~ service.icon ~ '.png') }}" class="h-10 md:h-16" />
                         </div>
                         <h3 class="text-2xl font-semibold mb-4 ">
                             {{ service.title }}
@@ -66,7 +66,7 @@
             </div>
         </div>
     </section>
-    <section id="articles" class="dotted-bg text-center p-15">
+    <section id="articles" class="dotted-bg text-center px-3 py-10 md:p-15">
         <img src="{{ asset('images/motorcycle.png') }}" class="h-22.5" alt="M&S Moto Bikes" />
         <h3 class="mt-2.5">
             Ce que nous proposons
@@ -78,7 +78,7 @@
             <div class="grid md:grid-cols-3 gap-7.5">
                 {% for bike in bikes %}
                     <div class="card relative pb-3.5">
-                        <div class="relative icon-cont mb-6.25 h-70 overflow-hidden group product-image">
+                        <div class="relative icon-cont mb-6.25 h-40 md:h-70 overflow-hidden group product-image">
                             {% set firstGalleryImage = bike.galleryImages|first %}
                             {% set hoverImage = firstGalleryImage ? firstGalleryImage.image : null %}
                             <img src="{{ bike.mainImage ? bike.mainImage.image : '/images/noimage.jpg' }}" alt="{{ bike.name }}" class="
@@ -95,10 +95,10 @@
                             " />
                             {% endif %}
                         </div>
-                        <h3 class="text-2xl font-semibold mb-4 px-4 text-left mt-6.25">
+                        <h3 class="text-lg md:text-2xl font-semibold mb-4 px-4 text-left mt-6.25">
                             {{ bike.name }}
                         </h3>
-                        <p class="text-xl text-left px-4">
+                        <p class="text-md md:text-xl text-left px-4">
                             {{ bike.description | slice(0, 150) }}
                             ...
                         </p>
@@ -112,8 +112,8 @@
             </div>
         </div>
     </section>
-    <section id="location" class="dark-bg text-center p-15">
-        <img src="{{ asset('images/pin.png') }}" class="h-15" alt="M&S Moto Location" />
+    <section id="location" class="dark-bg text-center px-3 py-10 md:p-15">
+        <img src="{{ asset('images/pin.png') }}" class="h-10 md:h-15" alt="M&S Moto Location" />
         <h3 class="mt-2.5">
             Comment nous trouver ?
         </h3>
@@ -122,21 +122,21 @@
         </h2>
         <div class="max-w-6xl mx-auto px-4 flex flex-col gap-6.25">
             {{ appGlobal.settings.location | raw }}
-            <div class="flex items-center gap-5.5">
-                <img src="{{ asset('/images/location.png') }}" class="h-10 w-10" />
-                <span class="text-3xl font-semibold">
+            <div class="flex items-center gap-2 md:gap-5.5">
+                <img src="{{ asset('/images/location.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
+                <span class="text-lg md:text-3xl font-semibold">
                     {{ appGlobal.settings.address }}
                 </span>
             </div>
-            <div class="flex items-center gap-5.5">
-                <img src="{{ asset('/images/phone.png') }}" class="h-10 w-10" />
-                <span class="text-3xl font-semibold">
+            <div class="flex items-center gap-2 md:gap-5.5">
+                <img src="{{ asset('/images/phone.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
+                <span class="text-lg md:text-3xl font-semibold">
                     {{ appGlobal.settings.phone|split('')|batch(2)|map(v => v|join(''))|join(' ') }}
                 </span>
             </div>
         </div>
     </section>
-    <section id="contact" class="relative accent-bg text-center p-15">
+    <section id="contact" class="relative accent-bg text-center px-3 py-10 md:p-15">
         <img src="{{ asset('images/plane.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" alt="M&S Moto Contact BG" />
         <img src="{{ asset('images/newsletter.png') }}" class="h-15" alt="M&S Moto Contact" />
         <h3 class="mt-2.5">

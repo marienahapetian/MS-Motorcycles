@@ -30,7 +30,7 @@ img {
     margin-bottom: -120px; /* height of the header */
 }
 .hero-content {
-    height: 100vh;
+    /* height: 100vh; */
     overflow: hidden;
     position: relative;
     top: -120px; /* height of the header */
@@ -102,7 +102,7 @@ img {
 }
 
 .header-icons {
-    display: flex;
+    /* display: flex; */
     gap: 20px;
 }
 
@@ -126,6 +126,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: auto;
 }
 
 .footer-center {
@@ -179,7 +180,7 @@ img {
 }
 #about h2, #about h3, #about p{
     position: relative;
-    z-index: 10;
+    z-index: 0;
     margin: auto;
 }
 #about h2{
@@ -295,4 +296,53 @@ select option:checked{
 
 .fade-out {
     opacity: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .logo img {
+        height: 80px;
+    }
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    #about img.absolute {
+        width: 100%;
+        left: 0;
+    }
+    #about img {
+        width: 100px;
+        margin-bottom: 20px;
+    }
+    #about h3 {
+        font-size: 30px;
+    }
+    section h3 {
+        font-size: 24px;
+        line-height: 100%;
+    }
+    #about h2 {
+        font-size: 64px;
+    }
+    section h2 {
+        font-size: 50px;
+        line-height: 100%;
+    }
+    #about p {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+    .footer-logo {
+        margin-bottom: 0;
+    }
+    .footer-social {
+        position: relative;
+        top: 15px;
+    }
+    .footer-social h4 {
+        margin-bottom: 0;
+    }
 }
