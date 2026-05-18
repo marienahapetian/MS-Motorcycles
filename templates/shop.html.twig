@@ -2,21 +2,32 @@
 {% block header %}
     <section class="header">
         {% include 'partials/_header.html.twig' %}
-        <div class="relative banner h-90 -mt-30">
+        <div class="relative banner h-50 md:h-90 -mt-30">
             <img src="{{ asset('images/1907896.jpg') }}" alt="Bike" class="brightness-50 w-full h-full object-cover object-center" />
-            <h1 class="absolute bottom-17.5 left-1/2 -translate-x-1/2 text-white text-8xl">
+            <h1 class="absolute bottom-17.5 left-1/2 -translate-x-1/2 text-white text-4xl md:text-8xl">
                 {{ page_title }}
             </h1>
         </div>
     </section>
 {% endblock %}
 {% block sidebar %}
-    <aside class="dotted-bg w-64 shrink-0 py-19 px-5">
-        {% include "partials/_filters.html.twig" %}
-    </aside>
+    <div class="w-full md:w-auto" data-controller="filters">
+        <button class="md:hidden w-full dotted-bg text-black px-5 py-4 flex items-center justify-between" data-action="click->filters#toggle">
+            <span>
+                Filters
+            </span>
+            <span data-filters-target="icon">
+                +
+            </span>
+        </button>
+        <aside class="dotted-bg overflow-hidden max-h-0 h-full opacity-0 transition-all duration-300 ease-in-out
+        md:max-h-none md:opacity-100 md:w-64 md:shrink-0 md:py-19 px-5" data-filters-target="panel">
+            {% include "partials/_filters.html.twig" %}
+        </aside>
+    </div>
 {% endblock %}
 {% block content %}
-    <div class="py-8 px-20 flex-1 bg-white">
+    <div class="py-8 px-10 md:px-20 flex-1 bg-white md:col-span-5">
         {% include "partials/_sorting.html.twig" %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for product in products %}

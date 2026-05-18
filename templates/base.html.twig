@@ -51,7 +51,7 @@
                 {% include 'partials/_header.html.twig' %}
             {% endblock %}
 
-            <div class="{{ hasSidebar ? 'flex' : 'content' }}">
+            <div class="{{ hasSidebar ? 'grid grid-cols-1 md:grid-cols-6' : 'content' }}">
 
                 {% block sidebar %}{% endblock %}
 
