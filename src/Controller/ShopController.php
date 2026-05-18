@@ -3,10 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Repository\CategoryRepository;
-use App\Repository\FeatureRepository;
-use App\Repository\ProductFeatureRepository;
-use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,22 +13,27 @@ use Symfony\Component\Routing\Attribute\Route;
 class ShopController extends AbstractController
 {
     #[Route('/shop', name: 'shop')]
-    public function index(Request $request, ProductRepository $pr, CategoryRepository $cr, ProductFeatureRepository $pfr): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $products = $pr->findAllProducts($request->query->getInt('page', 1));
-        $categories = $cr->getCategoriesFromProducts($products);
-        $colors = $pfr->getFeaturesFromProducts('couleur', $products);
-        $priceRanges = [
-            ['value' => 'lt1000', 'label' => '< 1000 €'],
-            ['value' => '1000-2000', 'label' => '1000 - 2000 €'],
-            ['value' => '2000-5000', 'label' => '2000 - 5000 €'],
-        ];
-
+        $products = $em->getRepository(Product::class)->findAllProducts($request->query->getInt('page', 1));
         return $this->render('shop.html.twig', [
             'page_title' => 'Shop',
-            'categories' => $categories,
-            'prices' => $priceRanges,
-            'colors' => $colors,
+            'categories' => [
+                ['id' => 1, 'name' => 'Sport Bikes'],
+                ['id' => 2, 'name' => 'Beginner Bikes'],
+            ],
+            'prices' => [
+                ['value' => 'lt1000', 'label' => '< 1000 €'],
+                ['value' => '1000-2000', 'label' => '1000 - 2000 €'],
+                ['value' => '2000-5000', 'label' => '2000 - 5000 €'],
+            ],
+            'colors' => [
+                ['name' => 'red', 'hex' => '#c0392b'],
+                ['name' => 'blue', 'hex' => '#3c40c6'],
+                ['name' => 'green', 'hex' => '#6ab04c'],
+                ['name' => 'black', 'hex' => '#000000'],
+                ['name' => 'white', 'hex' => '#ecf0f1'],
+            ],
             'products' => $products,
             'data' => $products,
             'hasSidebar' => true

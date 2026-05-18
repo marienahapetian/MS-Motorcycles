@@ -22,7 +22,7 @@ class FeatureRepository extends ServiceEntityRepository
 
     public function findAllFeatures(int $page)
     {
-        $query = $this->createQueryBuilder('f')
+        $query = $this->createQueryBuilder('p')
             ->getQuery();
         return $this->paginator->paginate($query, $page);
     }

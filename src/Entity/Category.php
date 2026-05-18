@@ -36,7 +36,7 @@ class Category
      * @var Collection<int, Product>
      */
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'categories')]
-    private Collection $products;
+    private Collection $Products;
 
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
@@ -50,7 +50,7 @@ class Category
     public function __construct()
     {
         $this->features = new ArrayCollection();
-        $this->products = new ArrayCollection();
+        $this->Products = new ArrayCollection();
         $this->brands = new ArrayCollection();
     }
 
@@ -93,13 +93,13 @@ class Category
      */
     public function getProducts(): Collection
     {
-        return $this->products;
+        return $this->Products;
     }
 
     public function addProduct(Product $product): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
+        if (!$this->Products->contains($product)) {
+            $this->Products->add($product);
         }
 
         return $this;
@@ -107,7 +107,7 @@ class Category
 
     public function removeProduct(Product $product): static
     {
-        $this->products->removeElement($product);
+        $this->Products->removeElement($product);
 
         return $this;
     }
