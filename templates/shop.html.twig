@@ -11,7 +11,7 @@
     </section>
 {% endblock %}
 {% block sidebar %}
-    <div class="w-full md:w-auto" data-controller="filters">
+    <div class="w-full md:w-auto">
         <button class="md:hidden w-full dotted-bg text-black px-5 py-4 flex items-center justify-between" data-action="click->filters#toggle">
             <span>
                 Filters
@@ -27,41 +27,8 @@
     </div>
 {% endblock %}
 {% block content %}
-    <div class="py-8 px-10 md:px-20 flex-1 bg-white md:col-span-5">
-        {% include "partials/_sorting.html.twig" %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for product in products %}
-                <div class="bg-white shadow-md rounded-sm overflow-hidden">
-                    <a href="{{ path('product_show', {id: product.id, slug: product.slug}) }}">
-                        <div class="relative w-full h-48 overflow-hidden group product-image">
-                            {% set hoverImage = product.galleryImages is not empty ? product.galleryImages.first.image : null %}
-                            <img src="{{ product.mainImage ? product.mainImage.image : '/images/noimage.jpg' }}" alt="{{ product.name }}" class="
-                                absolute inset-0 w-full h-full object-cover
-                                {% if hoverImage %}
-                                transition-opacity duration-300 group-hover:opacity-0
-                                {% endif %}
-                            " />
-                            {% if hoverImage %}
-                                <img src="{{ hoverImage }}" alt="{{ product.name }}" class="
-                                absolute inset-0 w-full h-full object-cover
-                                opacity-0 transition-opacity duration-300
-                                group-hover:opacity-100
-                            " />
-                            {% endif %}
-                        </div>
-                        <div class="flex items-center justify-between px-4 py-3 bg-white">
-                            <span class="font-semibold text-gray-800">
-                                {{ product.name }}
-                            </span>
-                            <span class="bg-gray-800 text-white text-sm px-3 py-1 rounded hover:bg-gray-700 transition">
-                                View
-                            </span>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-        {% include "partials/_pagination.html.twig" %}
+    <div class="py-8 px-10 md:px-20 flex-1 bg-white md:col-span-5" data-filters-target="results">
+        {% include "shop/_results.html.twig" %}
     </div>
     {% block page_contents %}{% endblock %}
 {% endblock %}

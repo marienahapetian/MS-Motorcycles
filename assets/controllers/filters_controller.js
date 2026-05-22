@@ -1,7 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets = ["panel", "icon"];
+    static targets = ["panel", "icon", 'form', 'results'];
+
+    connect() {
+        this.update();
+    }
 
     toggle() {
         const panel = this.panelTarget;
@@ -13,5 +17,17 @@ export default class extends Controller {
         panel.classList.toggle("opacity-100");
 
         this.iconTarget.textContent = panel.classList.contains("max-h-0") ? "+" : "−";
+    }
+
+     update() {
+        const params = new URLSearchParams(new FormData(this.formTarget));
+
+        window.history.pushState({}, '', '/shop?' + params.toString());
+
+        fetch('/shop/filter?' + params.toString())
+            .then(response => response.text())
+            .then(html => {
+                this.resultsTarget.innerHTML = html;
+            });
     }
 }

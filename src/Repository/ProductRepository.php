@@ -117,6 +117,67 @@ class ProductRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function createFilteredQuery(array $filters): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.categories', 'c')
+            ->leftJoin('p.brand', 'b')
+            ->leftJoin('p.features', 'pf')
+            ->leftJoin('pf.feature', 'f');
+
+        if (!empty($filters['categories'])) {
+            $qb->andWhere('c.id IN (:categories)')
+                ->setParameter('categories', $filters['categories']);
+        }
+
+        if (!empty($filters['brands'])) {
+            $qb->andWhere('b.id IN (:brands)')
+                ->setParameter('brands', $filters['brands']);
+        }
+
+        if (!empty($filters['colors'])) {
+            $qb->andWhere('f.name = :featureName')
+                ->andWhere('pf.value IN (:colors)')
+                ->setParameter('featureName', 'couleur')
+                ->setParameter('colors', $filters['colors']);
+        }
+
+        if (!empty($filters['prices'])) {
+
+            $priceConditions = $qb->expr()->orX();
+
+            foreach ($filters['prices'] as $key => $range) {
+
+                if ($range === '20000+') {
+                    $priceConditions->add('p.price >= 20000');
+                    continue;
+                }
+
+                [$min, $max] = explode('-', $range);
+
+                $paramMin = 'min_' . $key;
+                $paramMax = 'max_' . $key;
+
+                $priceConditions->add(
+                    "p.price BETWEEN :$paramMin AND :$paramMax"
+                );
+
+                $qb->setParameter($paramMin, (int)$min);
+                $qb->setParameter($paramMax, (int)$max);
+            }
+
+            $qb->andWhere($priceConditions);
+        }
+
+        return $qb
+            ->distinct()
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Services\FeatureValueMapper;
+use Knp\Component\Pager\PaginatorInterface;
 
 class ShopController extends AbstractController
 {
@@ -62,7 +63,31 @@ class ShopController extends AbstractController
             'colors' => $colors,
             'products' => $products,
             'data' => $products,
-            'hasSidebar' => true
+            'hasSidebar' => true,
+            'controllerName' => 'filters'
+        ]);
+    }
+
+    #[Route('/shop/filter', name: 'shop_filter')]
+    public function filter(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator): Response
+    {
+        $filters = [
+            'categories' => $request->query->all('categories'),
+            'brands'     => $request->query->all('brands'),
+            'prices'     => $request->query->all('prices'),
+            'colors'     => $request->query->all('colors'),
+        ];
+        $query = $em->getRepository(Product::class)
+            ->createFilteredQuery($filters);
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            12
+        );
+
+        return $this->render('shop/_results.html.twig', [
+            'products' => $pagination,
         ]);
     }
 }

@@ -1,0 +1,7 @@
+{% include "partials/_sorting.html.twig" %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% include "shop/_products.html.twig" with { products: products } %}
+</div>
+<div class="flex items-center justify-between gap-3 mt-8">
+    {{ knp_pagination_render(products, 'pagination/shop_pagination.html.twig') }}
+</div>
