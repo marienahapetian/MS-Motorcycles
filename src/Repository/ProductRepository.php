@@ -78,6 +78,45 @@ class ProductRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
+    public function findUsedCategories(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT c.id, c.name')
+            ->join('p.categories', 'c')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findUsedBrands(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT b.id, b.name')
+            ->join('p.brand', 'b')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findUsedColors(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT pf.id, pf.value')
+            ->join('p.features', 'pf')
+            ->join('pf.feature', 'f')
+            ->where('f.name = :name')
+            ->setParameter('name', 'Couleur')
+            ->orderBy('f.name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getMaxPrice(): ?int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('MAX(p.price)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
