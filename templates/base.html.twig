@@ -45,7 +45,8 @@
         {% endif %}
 
     </head>
-    <body class="min-h-screen {{ app.request.attributes.get('_route') }}">
+    <body class="min-h-screen {{ app.request.attributes.get('_route') }}" data-controller="anchor">
+
         {% block body %}
             {% block header %}
                 {% include 'partials/_header.html.twig' %}
@@ -68,6 +69,5 @@
             opacity-0 pointer-events-none hover:bg-red-700">
             ↑
         </button>
-
     </body>
-</html>
+</html></body></html>

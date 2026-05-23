@@ -21,12 +21,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('homepage') }}#about">
+                        <a href="{{ path('homepage') }}#about" data-controller="nav-scroll" data-action="click->nav-scroll#navigate">
                             À propos
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('homepage') }}#contact">
+                        <a href="{{ path('homepage') }}#contact" data-controller="nav-scroll" data-action="click->nav-scroll#navigate">
                             Contact
                         </a>
                     </li>
@@ -61,10 +61,10 @@
         <a href="{{ path('shop') }}">
             Shop
         </a>
-        <a href="{{ path('homepage') }}#about">
+        <a href="{{ path('homepage') }}#about" data-controller="nav-scroll" data-action="click->nav-scroll#navigate click->mobile-menu#toggle">
             À propos
         </a>
-        <a href="{{ path('homepage') }}#contact">
+        <a href="{{ path('homepage') }}#contact" data-controller="nav-scroll" data-action="click->nav-scroll#navigate click->mobile-menu#toggle">
             Contact
         </a>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
