@@ -85,35 +85,37 @@
             <div class="grid md:grid-cols-3 gap-7.5">
                 {% for bike in bikes %}
                     <div class="card relative pb-3.5">
-                        <div class="relative icon-cont mb-6.25 h-40 md:h-70 overflow-hidden group product-image">
-                            {% set firstGalleryImage = bike.galleryImages|first %}
-                            {% set hoverImage = firstGalleryImage ? firstGalleryImage.image : null %}
-                            <img src="{{ bike.mainImage ? bike.mainImage.image : '/images/noimage.jpg' }}" alt="{{ bike.name }}" class="
-                                absolute inset-0 w-full h-full object-cover object-center
+                        <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}">
+                            <div class="relative icon-cont mb-6.25 h-40 md:h-70 overflow-hidden group product-image">
+                                {% set firstGalleryImage = bike.galleryImages|first %}
+                                {% set hoverImage = firstGalleryImage ? firstGalleryImage.image : null %}
+                                <img src="{{ bike.mainImage ? bike.mainImage.image : '/images/noimage.jpg' }}" alt="{{ bike.name }}" class="
+                                    absolute inset-0 w-full h-full object-cover object-center
+                                    {% if hoverImage %}
+                                    transition-opacity duration-300 group-hover:opacity-0
+                                    {% endif %}
+                                " />
                                 {% if hoverImage %}
-                                transition-opacity duration-300 group-hover:opacity-0
+                                    <img src="{{ hoverImage }}" alt="{{ bike.name }}" class="
+                                    absolute inset-0 w-full h-full object-cover object-center
+                                    opacity-0 transition-opacity duration-300
+                                    group-hover:opacity-100
+                                " />
                                 {% endif %}
-                            " />
-                            {% if hoverImage %}
-                                <img src="{{ hoverImage }}" alt="{{ bike.name }}" class="
-                                absolute inset-0 w-full h-full object-cover object-center
-                                opacity-0 transition-opacity duration-300
-                                group-hover:opacity-100
-                            " />
-                            {% endif %}
-                        </div>
-                        <h3 class="text-lg md:text-2xl font-semibold mb-4 px-4 text-left mt-6.25">
-                            {{ bike.name }}
-                        </h3>
-                        <p class="text-md md:text-xl text-left px-4">
-                            {{ bike.description | slice(0, 150) }}
-                            ...
-                        </p>
-                        <p class="text-right pr-3">
-                            <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
-                                <img src="{{ asset('images/view.png') }}" class="h-6.75" />
-                            </a>
-                        </p>
+                            </div>
+                            <h3 class="text-lg md:text-2xl font-semibold mb-4 px-4 text-left mt-6.25">
+                                {{ bike.name }}
+                            </h3>
+                            <p class="text-md md:text-xl text-left px-4">
+                                {{ bike.description | slice(0, 150) }}
+                                ...
+                            </p>
+                            <p class="text-right pr-3">
+                                <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
+                                    <img src="{{ asset('images/view.png') }}" class="h-6.75" />
+                                </a>
+                            </p>
+                        </a>
                     </div>
                 {% endfor %}
             </div>
