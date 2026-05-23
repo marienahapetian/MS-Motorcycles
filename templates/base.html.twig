@@ -62,5 +62,12 @@
                 {% include 'partials/_footer.html.twig' %}
             {% endblock %}
         {% endblock %}
+        <button data-controller="scroll-top" data-action="click->scroll-top#scrollToTop" class="fixed bottom-6 right-6 z-50
+                accent-bg text-white cursor-pointer
+                w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-opacity duration-300
+            opacity-0 pointer-events-none hover:bg-red-700">
+            ↑
+        </button>
+
     </body>
 </html>

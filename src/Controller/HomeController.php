@@ -33,12 +33,28 @@ class HomeController extends AbstractController
             ],
         ];
 
-        $bikes = $pr->getAllByCategory(1, 3);
+        $sliderImgs = [
+            [
+                "text" => "Born To Ride",
+                "img" => "images/1111155.jpg"
+            ],
+            [
+                "text" => "Don't stop",
+                "img" => "images/1111157.jpg"
+            ],
+            [
+                "text" => "Speed is Life",
+                "img" => "images/speed.png"
+            ]
+        ];
+
+        $bikes = $pr->getAllByCategory(categoryId: 1, limit: 3);
 
         return $this->render('home.html.twig', [
             'page_title' => 'Home',
             'services' => $services,
             'bikes' => $bikes,
+            'sliderImgs' => $sliderImgs
         ]);
     }
 }
