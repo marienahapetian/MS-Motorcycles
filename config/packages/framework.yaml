@@ -4,6 +4,9 @@ framework:
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
+    router:
+        request_context:
+            scheme: 'https'
 
     #esi: true
     #fragments: true
