@@ -1,28 +1,42 @@
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-    git unzip libicu-dev libzip-dev zip \
-    && docker-php-ext-install intl pdo pdo_mysql zip
+    git \
+    unzip \
+    zip \
+    curl \
+    libicu-dev \
+    libzip-dev \
+    libonig-dev \
+    libpq-dev \
+    libxml2-dev \
+    && docker-php-ext-install \
+    intl \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    zip \
+    opcache
 
-# Enable Apache rewrite
 RUN a2enmod rewrite
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+COPY composer.json composer.lock ./
+
+RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader
+
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
-
-# Symfony public dir
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf
 
+RUN mkdir -p var/cache var/log
 RUN chown -R www-data:www-data var
 
 EXPOSE 80
