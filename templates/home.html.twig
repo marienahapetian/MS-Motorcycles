@@ -133,13 +133,13 @@
             {{ appGlobal.settings.location | raw }}
             <div class="flex items-center gap-2 md:gap-5.5">
                 <img src="{{ asset('/images/location.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
-                <span class="text-lg md:text-3xl font-semibold">
+                <span class="text-lg md:text-3xl font-semibold text-left">
                     {{ appGlobal.settings.address }}
                 </span>
             </div>
             <div class="flex items-center gap-2 md:gap-5.5">
                 <img src="{{ asset('/images/phone.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
-                <span class="text-lg md:text-3xl font-semibold">
+                <span class="text-lg md:text-3xl font-semibold text-left">
                     {{ appGlobal.settings.phone|split('')|batch(2)|map(v => v|join(''))|join(' ') }}
                 </span>
             </div>
