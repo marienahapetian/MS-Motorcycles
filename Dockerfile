@@ -22,39 +22,32 @@ RUN docker-php-ext-install \
     zip \
     opcache
 
-# Install Node.js (IMPORTANT - must come BEFORE npm commands)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
-
+# Enable Apache rewrite (IMPORTANT for Symfony routes)
 RUN a2enmod rewrite
+
+# CRITICAL FIX: allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Set correct document root (VERY IMPORTANT)
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy ONLY dependency files first (better caching)
+# Copy dependency files first (better caching)
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader
 
-# Copy everything else (INCLUDING package.json)
+# Copy full project
 COPY . .
 
-# Install JS dependencies + build assets
-RUN npm install
-RUN npm run build
-
-# Apache config for Symfony
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/*.conf \
-    /etc/apache2/apache2.conf
-
-# Permissions
-RUN mkdir -p var/cache var/log public/build \
-    && chown -R www-data:www-data var public/build
+# Ensure required folders exist (IMPORTANT for uploads + cache)
+RUN mkdir -p var/cache var/log public/images/uploads \
+    && chown -R www-data:www-data var public/images/uploads
 
 EXPOSE 80
-
-RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
