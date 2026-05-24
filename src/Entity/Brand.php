@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BrandRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +35,7 @@ class Brand
     public function __construct()
     {
         $this->Categories = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int

@@ -12,6 +12,6 @@ class AppGlobal
 
     public function getSettings()
     {
-        return $this->settingsRepository->find(1);
+        return $this->settingsRepository->findOneBy([]);
     }
 }
