@@ -56,3 +56,5 @@ RUN mkdir -p var/cache var/log public/build \
     && chown -R www-data:www-data var public/build
 
 EXPOSE 80
+
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
