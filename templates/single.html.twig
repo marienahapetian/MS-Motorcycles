@@ -60,9 +60,15 @@
                         </p>
                     {% endif %}
                 </div>
-                <p class="text-gray-500 leading-relaxed text-lg space-y-3 description">
-                    {{ product.description }}
-                </p>
+                <div data-controller="expand" class="relative">
+                    <p data-expand-target="content" class="text-gray-500 leading-relaxed text-lg whitespace-pre-line overflow-hidden transition-all duration-300 max-h-[500px]">
+                        {{ product.description }}
+                    </p>
+                    <div data-expand-target="overlay" class="absolute bottom-12 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
+                    <button type="button" data-action="click->expand#toggle" data-expand-target="button" class="mt-4 font-semibold">
+                        Voir plus ↓
+                    </button>
+                </div>
             </div>
         </div>
         <div class="mt-16">
