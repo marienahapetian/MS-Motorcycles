@@ -9,6 +9,7 @@ use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\FeatureRepository;
 use App\Repository\ProductRepository;
+use App\Services\CloudinaryImageUploader;
 use App\Services\ImageUploader;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Sami\Parser\Filter\CloudinaryFilter;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProductController extends AbstractController
@@ -33,7 +35,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/dashboard/product/edit/{id}', name: 'product_edit')]
-    public function edit(Product $product, EntityManager $entityManager, Request $request, FeatureRepository $featureRepository, SluggerInterface $slugger, ImageUploader $imageUploader): Response
+    public function edit(Product $product, EntityManager $entityManager, Request $request, FeatureRepository $featureRepository, CloudinaryImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -54,10 +56,10 @@ class ProductController extends AbstractController
             $files = $form->get('images')->getData();
             foreach ($files as $index => $file) {
 
-                $newFilename = $imageUploader->upload($file, $slugger);
+                $newFilename = $imageUploader->upload($file);
 
                 $image = new ProductImage();
-                $image->setImage('/images/uploads/' . $newFilename);
+                $image->setImage($newFilename);
 
                 $image->setIsMain(!$product->getMainImage());
 
@@ -113,7 +115,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/dashboard/product/add', name: 'product_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ImageUploader $imageUploader): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, CloudinaryImageUploader $imageUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $product = new Product();
@@ -125,10 +127,10 @@ class ProductController extends AbstractController
             $product->setAdded(new DateTime());
             $files = $form->get('images')->getData();
             foreach ($files as $index => $file) {
-                $newFilename = $imageUploader->upload($file, $slugger);
+                $newFilename = $imageUploader->upload($file);
 
                 $image = new ProductImage();
-                $image->setImage('/images/uploads/' . $newFilename);
+                $image->setImage($newFilename);
 
                 $image->setIsMain(!$product->getMainImage());
 

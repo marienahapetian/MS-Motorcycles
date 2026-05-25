@@ -4,6 +4,7 @@ namespace App\Controller\Dashboard;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Services\CloudinaryImageUploader;
 use App\Services\ImageUploader;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
@@ -28,16 +29,16 @@ class CategoryController extends AbstractController
     }
 
     #[Route("/dashboard/category/edit/{id}", "category_edit")]
-    public function edit(Request $request, SluggerInterface $slugger, EntityManager $entityManager, Category $category, ImageUploader $imageUploader): Response
+    public function edit(Request $request, EntityManager $entityManager, Category $category, CloudinaryImageUploader $imageUploader): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('icon')->getData();
             if ($file) {
-                $newFilename = $imageUploader->upload($file, $slugger);
+                $newFilename = $imageUploader->upload($file);
 
-                $category->setIcon('/images/uploads/' . $newFilename);
+                $category->setIcon($newFilename);
             }
 
 
@@ -56,7 +57,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route("/dashboard/category/add", "category_add")]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, CloudinaryImageUploader $imageUploader): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -64,6 +65,12 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $category = $form->getData();
+            $file = $form->get('icon')->getData();
+            if ($file) {
+                $newFilename = $imageUploader->upload($file);
+
+                $category->setIcon($newFilename);
+            }
             $category->setCreatedAt(new DateTime());
             $entityManager->persist($category);
             $entityManager->flush();
