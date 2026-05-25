@@ -39,23 +39,28 @@
                 </div>
             </div>
             <div>
-                <h1 class="text-3xl font-semibold tracking-wide mb-2">
+                <h1 class="text-3xl font-semibold tracking-wide">
                     {{ product.name }}
                 </h1>
+                <h2 class="text-md text-gray-500 font-semibold tracking-wide mb-2">
+                    Harley-Davidson
+                </h2>
                 <div class="grid md:grid-cols-2">
                     {% if product.year %}
                         <p class="accentcolor mb-4">
+                            Année:
                             {{ product.year }}
                         </p>
                     {% endif %}
                     {% if product.price %}
                         <p class="accentcolor mb-4">
+                            Prix:
                             {{ product.price }}
                             €
                         </p>
                     {% endif %}
                 </div>
-                <p class="text-gray-500 leading-relaxed text-lg space-y-3">
+                <p class="text-gray-500 leading-relaxed text-lg space-y-3 description">
                     {{ product.description }}
                 </p>
             </div>

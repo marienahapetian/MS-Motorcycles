@@ -120,7 +120,9 @@ img {
     color: #fff;
     padding: 40px 0;
 }
-
+.description {
+    white-space: pre-line;
+}
 .footer-content {
     position: relative;
     display: flex;
