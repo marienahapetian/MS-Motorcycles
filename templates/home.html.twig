@@ -85,7 +85,7 @@
             <div class="grid md:grid-cols-3 gap-7.5">
                 {% for bike in bikes %}
                     <div class="card relative pb-3.5">
-                        <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}">
+                        <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" aria-label="Voir l'article">
                             <div class="relative icon-cont mb-6.25 h-40 md:h-70 overflow-hidden group product-image">
                                 {% set firstGalleryImage = bike.galleryImages|first %}
                                 {% set hoverImage = firstGalleryImage ? firstGalleryImage.image : null %}
@@ -114,7 +114,7 @@
                                 ...
                             </p>
                             <p class="text-right pr-3">
-                                <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
+                                <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" aria-label="Voir l'article" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
                                     <img src="{{ asset('images/view.png') }}" class="h-6.75" alt="Icon Voir" />
                                 </a>
                             </p>
