@@ -60,7 +60,7 @@
                 {% for service in services %}
                     <div class="card text-center px-6.25 h-80 md:h-90 relative">
                         <div class="icon-cont size-fit mx-auto mb-6 px-10.75 py-5.75  flex items-center justify-center">
-                            <img src="{{ asset('images/' ~ service.icon ~ '.png') }}" class="h-10 md:h-16" />
+                            <img src="{{ asset('images/' ~ service.icon ~ '.png') }}" alt="Service Icon" class="h-10 md:h-16" />
                         </div>
                         <h3 class="text-2xl font-semibold mb-4 ">
                             {{ service.title }}
@@ -115,7 +115,7 @@
                             </p>
                             <p class="text-right pr-3">
                                 <a href="{{ path('product_show', {slug: bike.slug, id: bike.id}) }}" class="mt-2.5 px-7.25 py-1 accentbg inline-block cursor-pointer">
-                                    <img src="{{ asset('images/view.png') }}" class="h-6.75" />
+                                    <img src="{{ asset('images/view.png') }}" class="h-6.75" alt="Icon Voir" />
                                 </a>
                             </p>
                         </a>
@@ -135,13 +135,13 @@
         <div class="max-w-6xl mx-auto px-4 flex flex-col gap-6.25">
             {{ appGlobal.settings.location | raw }}
             <div class="flex items-center gap-2 md:gap-5.5">
-                <img src="{{ asset('/images/location.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
+                <img src="{{ asset('/images/location.png') }}" class="h-6 w-6 md:h-10 md:w-10" alt="Location Icon" />
                 <span class="text-lg md:text-3xl font-semibold text-left">
                     {{ appGlobal.settings.address }}
                 </span>
             </div>
             <div class="flex items-center gap-2 md:gap-5.5">
-                <img src="{{ asset('/images/phone.png') }}" class="h-6 w-6 md:h-10 md:w-10" />
+                <img src="{{ asset('/images/phone.png') }}" class="h-6 w-6 md:h-10 md:w-10" alt="Phone Icon" />
                 <span class="text-lg md:text-3xl font-semibold text-left">
                     {{ appGlobal.settings.phone|split('')|batch(2)|map(v => v|join(''))|join(' ') }}
                 </span>

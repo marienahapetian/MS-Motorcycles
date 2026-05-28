@@ -38,7 +38,7 @@
                 </p>
                 <div>
                     {% if product.mainImage %}
-                        <img src="{{ product.mainImage.image }}" class="w-full col-span-2 h-40 object-cover  border" />
+                        <img src="{{ product.mainImage.image }}" alt="Article Image" class="w-full col-span-2 h-40 object-cover  border" />
                     {% endif %}
                     <label class="flex items-center justify-center mt-2 w-full h-20 border-2 border-dashed  cursor-pointer hover:bg-gray-50">
                         <span class="text-2xl text-gray-400">
@@ -59,7 +59,7 @@
                         {% if product.galleryImages %}
                             {% for image in product.galleryImages %}
                                 <div class="relative group ">
-                                    <img src="{{ asset(image.image) }}" class="w-full h-24 object-cover border" />
+                                    <img src="{{ asset(image.image) }}" alt="Article Image" class="w-full h-24 object-cover border" />
                                     <a href="{{ path('product_image_delete', {id: image.id}) }}" onclick="return confirm('Delete this image?')" class="absolute hidden group-hover:flex top-0 right-0 px-2 py-1 text-xs rounded">
                                         ✕
                                     </a>

@@ -17,7 +17,7 @@
             {% for product in products %}
                 <div class="grid grid-cols-5 gap-3 shadow-sm p-2.5">
                     <div class="h-30 w-50">
-                        <img src="{{ product.mainImage?product.mainImage.image: " /images/noimage.jpg" }}" class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition" />
+                        <img src="{{ product.mainImage?product.mainImage.image: " /images/noimage.jpg" }}" alt="Article Image" class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition" />
                     </div>
                     <div class="col-span-4 flex flex-col">
                         <h4 class="text-xl accentcolor">
