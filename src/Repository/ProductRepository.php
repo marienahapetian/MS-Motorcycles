@@ -99,7 +99,7 @@ class ProductRepository extends ServiceEntityRepository
     public function findUsedColors(): array
     {
         return $this->createQueryBuilder('p')
-            ->select('DISTINCT pf.id, pf.value')
+            ->select('DISTINCT pf.value')
             ->join('p.features', 'pf')
             ->join('pf.feature', 'f')
             ->where('f.name = :name')
