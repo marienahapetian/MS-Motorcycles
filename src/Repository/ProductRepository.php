@@ -104,7 +104,7 @@ class ProductRepository extends ServiceEntityRepository
             ->join('pf.feature', 'f')
             ->where('f.name = :name')
             ->setParameter('name', 'Couleur')
-            ->orderBy('f.name', 'ASC')
+            ->orderBy('pf.value', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
