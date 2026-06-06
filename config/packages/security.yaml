@@ -27,7 +27,9 @@ security:
                 login_path: app_login
                 check_path: app_login
                 default_target_path: dashboard_home
-                enable_csrf: false
+                # enable_csrf: true # if true, it expects token with id authenticate for login
+                # csrf_parameter: _token
+                # csrf_token_id: authenticate
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
