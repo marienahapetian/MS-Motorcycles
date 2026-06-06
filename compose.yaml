@@ -2,12 +2,19 @@ services:
   app:
     build: .
     ports:
-      - "80:80"
+      - "8081:80"
+    depends_on:
+      - database
+    restart: unless-stopped
 
   database:
-    image: mysql:8
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
     volumes:
-      - mysql_data:/var/lib/mysql
+      - database_data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  database_data:
