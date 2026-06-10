@@ -8,6 +8,7 @@
             Ajouter une Marque
         </h1>
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         <div class="mb-4">
             {{ form_label(form.name, "Nom de la marque", {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1' }}
             ) }}

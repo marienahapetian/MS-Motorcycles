@@ -10,7 +10,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,20 +36,26 @@ class CategoryController extends AbstractController
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('icon')->getData();
-            if ($file) {
-                $newFilename = $imageUploader->upload($file);
+            try {
+                $file = $form->get('icon')->getData();
+                if ($file) {
+                    $newFilename = $imageUploader->upload($file);
 
-                $category->setIcon($newFilename);
+                    $category->setIcon($newFilename);
+                }
+
+
+                $entityManager->persist($category);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Catégorie modifiée!');
+
+                return $this->redirectToRoute('dashboard_categories');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while editing the category.'
+                ));
             }
-
-
-            $entityManager->persist($category);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Catégorie modifiée!');
-
-            return $this->redirectToRoute('dashboard_categories');
         }
 
         return $this->render("dashboard/category/edit.html.twig", [
@@ -64,18 +72,24 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category = $form->getData();
-            $file = $form->get('icon')->getData();
-            if ($file) {
-                $newFilename = $imageUploader->upload($file);
+            try {
+                $category = $form->getData();
+                $file = $form->get('icon')->getData();
+                if ($file) {
+                    $newFilename = $imageUploader->upload($file);
 
-                $category->setIcon($newFilename);
+                    $category->setIcon($newFilename);
+                }
+                $category->setCreatedAt(new DateTime());
+                $entityManager->persist($category);
+                $entityManager->flush();
+                $this->addFlash('success', 'Catégorie crée!');
+                return $this->redirectToRoute('dashboard_categories');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while adding the category.'
+                ));
             }
-            $category->setCreatedAt(new DateTime());
-            $entityManager->persist($category);
-            $entityManager->flush();
-            $this->addFlash('success', 'Catégorie crée!');
-            return $this->redirectToRoute('dashboard_categories');
         }
         return $this->render("dashboard/category/add.html.twig", ['form' => $form]);
     }

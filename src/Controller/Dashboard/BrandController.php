@@ -7,9 +7,11 @@ use App\Form\BrandType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
+use Exception;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,12 +33,18 @@ class BrandController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($brand);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($brand);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Marque modifiée!');
+                $this->addFlash('success', 'Marque modifiée!');
 
-            return $this->redirectToRoute('dashboard_brands');
+                return $this->redirectToRoute('dashboard_brands');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while editing the brand.'
+                ));
+            }
         }
         return $this->render("dashboard/brand/edit.html.twig", [
             'brand' => $brand,
@@ -52,13 +60,19 @@ class BrandController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $brand->setCreatedAt(new DateTime());
-            $entityManager->persist($brand);
-            $entityManager->flush();
+            try {
+                $brand->setCreatedAt(new DateTime());
+                $entityManager->persist($brand);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Marque crée!');
+                $this->addFlash('success', 'Marque crée!');
 
-            return $this->redirectToRoute('dashboard_brands');
+                return $this->redirectToRoute('dashboard_brands');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while adding the brand.'
+                ));
+            }
         }
         return $this->render("dashboard/brand/add.html.twig", [
             'brand' => $brand,

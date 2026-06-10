@@ -8,6 +8,7 @@
             Modifier la Catégorie
         </h1>
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         <div class="mb-4">
             {{ form_label(form.name, "Nom de Type de Produit", {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1' }}
             ) }}

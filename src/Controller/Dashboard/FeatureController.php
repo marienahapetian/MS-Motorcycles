@@ -9,7 +9,9 @@ use App\Form\FeatureType;
 use Doctrine\Migrations\Configuration\EntityManager\ManagerRegistryEntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -37,10 +39,16 @@ class FeatureController extends AbstractController
         $categories = $em->getRepository(Category::class)->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($feature);
-            $em->flush();
+            try {
+                $em->persist($feature);
+                $em->flush();
 
-            return $this->redirectToRoute('dashboard_features');
+                return $this->redirectToRoute('dashboard_features');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while editing the feature.'
+                ));
+            }
         }
         return $this->render("dashboard/feature/edit.html.twig", [
             'feature' => $feature,
@@ -61,10 +69,16 @@ class FeatureController extends AbstractController
         $categories = $doctrine->getRepository(Category::class)->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $feature = $form->getData();
-            $entityManager->persist($feature);
-            $entityManager->flush();
-            return $this->redirectToRoute('dashboard_features');
+            try {
+                $feature = $form->getData();
+                $entityManager->persist($feature);
+                $entityManager->flush();
+                return $this->redirectToRoute('dashboard_features');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while adding the feature.'
+                ));
+            }
         }
 
         return $this->render("dashboard/feature/add.html.twig", [

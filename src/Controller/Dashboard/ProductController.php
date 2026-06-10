@@ -19,7 +19,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Sami\Parser\Filter\CloudinaryFilter;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProductController extends AbstractController
@@ -51,61 +53,68 @@ class ProductController extends AbstractController
             }
         }
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // upload images, gallery
-            $files = $form->get('images')->getData();
-            foreach ($files as $index => $file) {
+            try {
+                // upload images, gallery
+                $files = $form->get('images')->getData();
+                foreach ($files as $index => $file) {
 
-                $newFilename = $imageUploader->upload($file);
+                    $newFilename = $imageUploader->upload($file);
 
-                $image = new ProductImage();
-                $image->setImage($newFilename);
+                    $image = new ProductImage();
+                    $image->setImage($newFilename);
 
-                $image->setIsMain(!$product->getMainImage());
+                    $image->setIsMain(!$product->getMainImage());
 
-                $product->addImage($image);
-            }
-
-            //update features
-            $featuresData = $request->request->all('features');
-            foreach ($featuresData as $featureId => $value) {
-
-                if (!$value) {
-                    continue;
+                    $product->addImage($image);
                 }
 
-                $feature = $featureRepository->find($featureId);
+                //update features
+                $featuresData = $request->request->all('features');
+                foreach ($featuresData as $featureId => $value) {
 
-                // find existing ProductFeature
-                $productFeature = null;
-
-                foreach ($product->getFeatures() as $existing) {
-
-                    if ($existing->getFeature()->getId() == $featureId) {
-                        $productFeature = $existing;
-                        break;
+                    if (!$value) {
+                        continue;
                     }
+
+                    $feature = $featureRepository->find($featureId);
+
+                    // find existing ProductFeature
+                    $productFeature = null;
+
+                    foreach ($product->getFeatures() as $existing) {
+
+                        if ($existing->getFeature()->getId() == $featureId) {
+                            $productFeature = $existing;
+                            break;
+                        }
+                    }
+
+                    if (!$productFeature) {
+                        $productFeature = new ProductFeature();
+                        $productFeature->setProduct($product);
+                        $productFeature->setFeature($feature);
+
+                        $product->getFeatures()->add($productFeature);
+                    }
+
+                    $productFeature->setValue($value);
+
+                    $entityManager->persist($productFeature);
                 }
+                $product->setModified(new DateTime());
+                $entityManager->persist($product);
+                $entityManager->flush();
 
-                if (!$productFeature) {
-                    $productFeature = new ProductFeature();
-                    $productFeature->setProduct($product);
-                    $productFeature->setFeature($feature);
+                $this->addFlash('success', 'Article Modifié!');
 
-                    $product->getFeatures()->add($productFeature);
-                }
-
-                $productFeature->setValue($value);
-
-                $entityManager->persist($productFeature);
+                return $this->redirectToRoute('dashboard_products');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while saving the product.'
+                ));
             }
-            $product->setModified(new DateTime());
-            $entityManager->persist($product);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Article Modifié!');
-
-            return $this->redirectToRoute('dashboard_products');
         }
         return $this->render("dashboard/product/edit.html.twig", [
             "product" => $product,
@@ -123,24 +132,30 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product = $form->getData();
-            $product->setAdded(new DateTime());
-            $files = $form->get('images')->getData();
-            foreach ($files as $index => $file) {
-                $newFilename = $imageUploader->upload($file);
+            try {
+                $product = $form->getData();
+                $product->setAdded(new DateTime());
+                $files = $form->get('images')->getData();
+                foreach ($files as $index => $file) {
+                    $newFilename = $imageUploader->upload($file);
 
-                $image = new ProductImage();
-                $image->setImage($newFilename);
+                    $image = new ProductImage();
+                    $image->setImage($newFilename);
 
-                $image->setIsMain(!$product->getMainImage());
+                    $image->setIsMain(!$product->getMainImage());
 
-                $product->addImage($image);
+                    $product->addImage($image);
+                }
+                $entityManager->persist($product);
+                $entityManager->flush();
+                $this->addFlash('success', 'Article crée!');
+
+                return $this->redirectToRoute('dashboard_products');
+            } catch (Exception $e) {
+                $form->addError(new FormError(
+                    'An error occurred while adding the product.'
+                ));
             }
-            $entityManager->persist($product);
-            $entityManager->flush();
-            $this->addFlash('success', 'Article crée!');
-
-            return $this->redirectToRoute('dashboard_products');
         }
         return $this->render("dashboard/product/add.html.twig", [
             'form' => $form,
